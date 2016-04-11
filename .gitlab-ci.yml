@@ -8,8 +8,6 @@ arm-debug:
   artifacts:
     paths:
       - build/cute-reports
-      - build/products/Debug/lib
-      - build/products/Debug/bin
 
 arm-release:
   script:
@@ -34,8 +32,6 @@ x86_64-debug:
   artifacts:
     paths:
       - build/cute-reports
-      - build/products/Debug/lib
-      - build/products/Debug/bin
 
 x86_64-release:
   script:
