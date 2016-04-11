@@ -1,0 +1,52 @@
+arm-debug:
+  script:
+    - cd build
+    - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Debug
+    - make -j$(nproc)
+  tags:
+    - arm
+  artifacts:
+    paths:
+      - build/cute-reports
+      - build/products/Debug/lib
+      - build/products/Debug/bin
+
+arm-release:
+  script:
+    - cd build
+    - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Release
+    - make -j$(nproc)
+  tags:
+    - arm
+  artifacts:
+    paths:
+      - build/cute-reports
+      - build/products/Release/lib
+      - build/products/Release/bin
+
+x86_64-debug:
+  script:
+    - cd build
+    - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Debug
+    - make -j$(nproc)
+  tags:
+    - x86_64
+  artifacts:
+    paths:
+      - build/cute-reports
+      - build/products/Debug/lib
+      - build/products/Debug/bin
+
+x86_64-release:
+  script:
+    - cd build
+    - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Release
+    - make -j$(nproc)
+  tags:
+    - x86_64
+  artifacts:
+    paths:
+      - build/cute-reports
+      - build/products/Release/lib
+      - build/products/Release/bin
+
