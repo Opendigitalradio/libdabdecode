@@ -7,34 +7,60 @@ namespace dabdecode
   {
 
   template<std::size_t Carriers,
-           std::size_t SymbolsPerFrame,
-           std::size_t SymbolsPerFic,
-           std::size_t CodewordsPerFic,
-           std::size_t FibsPerCodeword,
-           std::size_t UnpuncturedCodewordLength,
-           std::size_t DeconvolvedCodewordLength>
+           std::size_t FrameSymbols,
+           std::size_t FicSymbols,
+           std::size_t FrameFibs,
+           std::size_t FrameCifs>
   struct basic_mode
     {
+    /*
+     * @internal
+     *
+     * The number of carriers for the selected transport mode.
+     */
     using carriers = std::integral_constant<std::size_t, Carriers>;
-    auto static constexpr carriers_v = carriers::value;
 
-    using symbols_per_frame = std::integral_constant<std::size_t, SymbolsPerFrame>;
-    auto static constexpr symbols_per_frame_v = symbols_per_frame::value;
+    /*
+     * @internal
+     *
+     * The number of symbols that make up a single frame.
+     */
+    using frame_symbols = std::integral_constant<std::size_t, FrameSymbols>;
 
-    using symbols_per_fic = std::integral_constant<std::size_t, SymbolsPerFic>;
-    auto static constexpr symbols_per_fic_v = symbols_per_fic::value;
+    /*
+     * @internal
+     *
+     * The number of symbols that make up the Fast Information Channel (FIC).
+     */
+    using fic_symbols = std::integral_constant<std::size_t, FicSymbols>;
 
-    using codewords_per_fic = std::integral_constant<std::size_t, CodewordsPerFic>;
-    auto static constexpr codewords_per_fic_v = codewords_per_fic::value;
+    /*
+     * @internal
+     *
+     * The number of symbols that kame up the Main Service Channel (MSC).
+     */
+    using msc_symbols = std::integral_constant<std::size_t, FrameSymbols - FicSymbols>;
 
-    using fibs_per_codeword = std::integral_constant<std::size_t, FibsPerCodeword>;
-    auto static constexpr fibs_per_codeword_v = fibs_per_codeword::value;
+    /*
+     * @internal
+     *
+     * The number of Fast Information Blocks (FIBs) in a single frame.
+     */
+    using frame_fibs = std::integral_constant<std::size_t, FrameFibs>;
 
-    using unpunctured_codeword_length = std::integral_constant<std::size_t, UnpuncturedCodewordLength>;
-    auto static constexpr unpunctured_codeword_length_v = unpunctured_codeword_length::value;
+    /*
+     * @internal
+     *
+     * The number of Common Interleaved Frames (CIFs) contained in a single frame.
+     */
+    using frame_cifs = std::integral_constant<std::size_t, FrameCifs>;
 
-    using deconvolved_codeword_length = std::integral_constant<std::size_t, DeconvolvedCodewordLength>;
-    auto static constexpr deconvolved_codeword_length_v = deconvolved_codeword_length::value;
+    /*
+     * @internal
+     *
+     * The number of bits the make up a FIB codeword. Each codeword contains a group of FIBs that describe a CIF.
+     */
+    using fib_codeword_bits = std::integral_constant<std::size_t, frame_fibs::value * 256 / frame_cifs::value>;
     };
 
   }
