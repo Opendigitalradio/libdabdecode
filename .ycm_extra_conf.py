@@ -34,11 +34,9 @@ flags = [
     '-x',
     'c++',
     '-I',
-    '.',
-    '-I',
-    'include',
-    '-I',
-    '../include'
+    scriptPath + '/include',
+    '-isystem',
+    scriptPath + '/third_party/cute',
     '-Wall',
     '-Wextra',
     '-pedantic',
@@ -101,7 +99,7 @@ def FlagsForFile(filename, **kwargs):
             return None
 
         final_flags = MakeRelativePathsInFlagsAbsolute(compilation_info.compiler_flags_,
-                                                       compilation_info.compiler_working_dir_) + systemIncludes
+                                                       compilation_info.compiler_working_dir_) + MakeRelativePathsInFlagsAbsolute(flags, scriptPath)
     else:
         final_flags = MakeRelativePathsInFlagsAbsolute(flags, scriptPath)
 
