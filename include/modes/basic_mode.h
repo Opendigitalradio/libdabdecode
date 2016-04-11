@@ -61,6 +61,13 @@ namespace dabdecode
      * The number of bits the make up a FIB codeword. Each codeword contains a group of FIBs that describe a CIF.
      */
     using fib_codeword_bits = std::integral_constant<std::size_t, frame_fibs::value * 256 / frame_cifs::value>;
+
+    /*
+     * @internal
+     *
+     * The number of bits in a symbol.
+     */
+    using symbol_bits = std::integral_constant<std::size_t, carriers::value * 2>;
     };
 
   }

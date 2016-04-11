@@ -96,7 +96,8 @@ def FlagsForFile(filename, **kwargs):
     if database:
         compilation_info = GetCompilationInfoForFile(filename)
         if not compilation_info:
-            return None
+            final_flags = MakeRelativePathsInFlagsAbsolute(flags, scriptPath)
+            return { 'flags': final_flags, 'do_cache': True }
 
         final_flags = MakeRelativePathsInFlagsAbsolute(compilation_info.compiler_flags_,
                                                        compilation_info.compiler_working_dir_) + MakeRelativePathsInFlagsAbsolute(flags, scriptPath)

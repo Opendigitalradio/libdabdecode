@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DABDECODE_VITERBI__CORE_ALGORITHMS
-#define __DABDECODE_VITERBI__CORE_ALGORITHMS
+#ifndef __DABDECODE_VITERBI__FSM
+#define __DABDECODE_VITERBI__FSM
 
 #include <vector>
 #include <iosfwd>
