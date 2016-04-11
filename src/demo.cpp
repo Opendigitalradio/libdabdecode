@@ -1,4 +1,5 @@
 #include "frame.h"
+#include "figs/basic_fig.h"
 
 #include <vector>
 #include <fstream>
@@ -53,19 +54,22 @@ int main() try
     return 1;
     }
 
-    while(syncStream && dataStream)
-      {
-      auto frame = dabdecode::frame{get_frame(syncStream, dataStream), 1};
-      auto fic = frame.fic();
+  while(syncStream && dataStream)
+    {
+    auto frame = dabdecode::frame{get_frame(syncStream, dataStream), 1};
+    auto fic = frame.fic();
 
-      for(auto const & fib : fic)
+    for(auto const fib : fic)
+      {
+      if(fib)
         {
-        if(fib)
+        for(auto const & fig : fib.figs())
           {
-          std::cout << "CRC OK\n";
+          std::cout << *fig << '\n';
           }
         }
       }
+    }
 
   }
 catch(...)

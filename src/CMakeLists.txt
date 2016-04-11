@@ -1,6 +1,9 @@
 set(LIB_SOURCES viterbi/fsm.cpp
                 viterbi/core_algorithms.cpp
                 viterbi/calc_metric.cpp
+                figs/basic_fig.cpp
+                figs/helpers.cpp
+                figs/fig0.cpp
                 frame.cpp
                 fib.cpp
                 modes/helpers.cpp)
