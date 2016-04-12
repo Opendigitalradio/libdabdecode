@@ -1,4 +1,4 @@
-#include "modes/modes.h"
+#include "mode/modes.h"
 
 #include <cute/cute.h>
 #include <cute/cute_runner.h>

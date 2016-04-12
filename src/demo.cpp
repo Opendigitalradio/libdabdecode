@@ -1,10 +1,9 @@
-#include "frame.h"
-#include "figs/basic_fig.h"
+#include "frame/frame.h"
 
 #include <vector>
 #include <fstream>
 #include <iostream>
-
+#include <stdexcept>
 
 std::vector<float> get_frame(std::ifstream & sync, std::ifstream & data)
   {
@@ -37,7 +36,7 @@ std::vector<float> get_frame(std::ifstream & sync, std::ifstream & data)
   return extracted;
   }
 
-int main() try
+int main()
   {
   auto syncStream = std::ifstream{"data/syn", std::ios::binary};
   auto dataStream = std::ifstream{"data/dat", std::ios::binary};
@@ -59,21 +58,14 @@ int main() try
     auto frame = dabdecode::frame{get_frame(syncStream, dataStream), 1};
     auto fic = frame.fic();
 
-    for(auto const fib : fic)
+    for(auto const & fib : fic)
       {
-      if(fib)
+      for(auto const & fig : fib.figs())
         {
-        for(auto const & fig : fib.figs())
-          {
-          std::cout << *fig << '\n';
-          }
+        std::cout << "FIG of length" << fig->length() << '\n';
         }
       }
     }
-
-  }
-catch(...)
-  {
 
   }
 

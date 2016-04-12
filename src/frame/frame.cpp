@@ -1,8 +1,8 @@
 #include "constants/puncturing_vectors.h"
-#include "frame.h"
-#include "modes/helpers.h"
+#include "frame/frame.h"
+#include "frame/fib/fib.h"
+#include "mode/modes.h"
 #include "viterbi/core_algorithms.h"
-#include "fib.h"
 
 #include <memory>
 #include <stdexcept>

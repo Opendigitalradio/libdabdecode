@@ -1,5 +1,4 @@
-#include "modes/helpers.h"
-#include "modes/modes.h"
+#include "mode/modes.h"
 
 #include <stdexcept>
 

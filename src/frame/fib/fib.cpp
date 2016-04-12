@@ -1,10 +1,7 @@
-#include "fib.h"
-#include "figs/helpers.h"
-#include "figs/basic_fig.h"
+#include "frame/fib/fib.h"
+#include "frame/fib/fig/fig.h"
 
 #include <boost/crc.hpp>
-
-#include <iostream>
 
 namespace dabdecode
   {
@@ -29,13 +26,18 @@ namespace dabdecode
     return !checker.checksum();
     }
 
-  std::vector<std::shared_ptr<basic_fig>> const & fib::figs() const
+  std::vector<fib::fig_pointer> const & fib::figs() const
     {
     return m_figs;
     }
 
   void fib::parse_figs()
     {
+    if(m_data[0] == 255)
+      {
+      return;
+      }
+
     m_figs.push_back(make_fig({m_data.cbegin(), m_data.cend()}));
     auto processed = m_figs.back()->length() + 1;
 
@@ -51,16 +53,6 @@ namespace dabdecode
         processed += m_figs.back()->length() + 1;
         }
       }
-    }
-
-  std::ostream & operator<<(std::ostream & out, fib const & fib)
-    {
-    for(auto & byte : fib.m_data)
-      {
-      std::cout << byte;
-      }
-
-    return out;
     }
 
   }

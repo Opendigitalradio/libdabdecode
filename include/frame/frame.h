@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "constants/convolution_encoder_attributes.h"
+#include "fib/fib.h"
 #include "viterbi/fsm.h"
-#include "fib.h"
 
 
 namespace dabdecode
