@@ -8,37 +8,37 @@
 
 void test_carriers_equals_384()
   {
-  ASSERT_EQUAL(384, dabdecode::mode_2::carriers::value);
+  ASSERT_EQUAL(384, dabdecode::constants::mode_2::carriers::value);
   }
 
 void test_frame_symbols_equals_75()
   {
-  ASSERT_EQUAL(75, dabdecode::mode_2::frame_symbols::value);
+  ASSERT_EQUAL(75, dabdecode::constants::mode_2::frame_symbols::value);
   }
 
 void test_fic_symbols_equals_3()
   {
-  ASSERT_EQUAL(3, dabdecode::mode_2::fic_symbols::value);
+  ASSERT_EQUAL(3, dabdecode::constants::mode_2::fic_symbols::value);
   }
 
 void test_msc_symbols_equals_72()
   {
-  ASSERT_EQUAL(72, dabdecode::mode_2::msc_symbols::value);
+  ASSERT_EQUAL(72, dabdecode::constants::mode_2::msc_symbols::value);
   }
 
 void test_frame_fibs_equals_3()
   {
-  ASSERT_EQUAL(3, dabdecode::mode_2::frame_fibs::value);
+  ASSERT_EQUAL(3, dabdecode::constants::mode_2::frame_fibs::value);
   }
 
 void test_frame_cifs_equals_1()
   {
-  ASSERT_EQUAL(1, dabdecode::mode_2::frame_cifs::value);
+  ASSERT_EQUAL(1, dabdecode::constants::mode_2::frame_cifs::value);
   }
 
 void test_fib_codeword_bits_equals_768()
   {
-  ASSERT_EQUAL(768, dabdecode::mode_2::fib_codeword_bits::value);
+  ASSERT_EQUAL(768, dabdecode::constants::mode_2::fib_codeword_bits::value);
   }
 
 int main(int argc, char * * argv)

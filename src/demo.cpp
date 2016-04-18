@@ -55,7 +55,7 @@ int main()
 
   while(syncStream && dataStream)
     {
-    auto frame = dabdecode::frame{get_frame(syncStream, dataStream), 1};
+    auto frame = dabdecode::frame{get_frame(syncStream, dataStream), dabdecode::transport_mode::mode_1};
     auto fic = frame.fic();
 
     for(auto const & fib : fic)
