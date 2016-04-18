@@ -46,3 +46,29 @@ x86_64-release:
       - build/products/Release/lib
       - build/products/Release/bin
 
+doc-internal:
+  script:
+    - cd build
+    - cmake .. -DBUILD_DOCUMENTATION_ONLY=ON -DBUILD_INTERNAL_DOCUMENTATION=ON
+    - make
+    - cd doc/latex
+    - make
+  tags:
+    - x86_64
+  artifacts:
+    - build/doc/html
+    - build/doc/latex/refman.pdf
+
+doc-internal:
+  script:
+    - cd build
+    - cmake .. -DBUILD_DOCUMENTATION_ONLY=ON -DBUILD_INTERNAL_DOCUMENTATION=OFF
+    - make
+    - cd doc/latex
+    - make
+  tags:
+    - x86_64
+  artifacts:
+    - build/doc/html
+    - build/doc/latex/refman.pdf
+

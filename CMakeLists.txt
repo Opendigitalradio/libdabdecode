@@ -5,6 +5,11 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "The build type" FORCE)
 endif()
 
+option(BUILD_DOCUMENTATION          "Build the libdabdecode documentation." OFF)
+option(BUILD_DOCUMENTATION_ONLY     "Only build the documentation not the libraries." OFF)
+option(BUILD_INTERNAL_DOCUMENTATION "Generate internal developer documentation." OFF)
+option(WITH_TESTS                   "Build and run the unit tests." ON)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 set(OUTPUT_PREFIX "${CMAKE_BINARY_DIR}/products/${CMAKE_BUILD_TYPE}" CACHE STRING "The build product prefix")
@@ -24,20 +29,26 @@ endif()
 include_directories("include")
 include_directories(SYSTEM "third_party/cute")
 
-add_subdirectory("src")
+if(BUILD_DOCUMENTATION_ONLY)
+  set(BUILD_DOCUMENTATION          ON CACHE BOOL "Build the libdabdecode documentation." FORCE)
+else()
+  add_subdirectory("src")
 
-option(WITH_TESTS "Build and run the unit tests" ON)
-if(WITH_TESTS)
-  include(CUTE)
-  add_subdirectory(test)
+  if(WITH_TESTS)
+    include(CUTE)
+    add_subdirectory(test)
+  endif()
 endif()
 
-option(WITH_DOCS "Build the libdabdecode documentation" OFF)
-set(GENERATE_INTERNAL_DOCS NO)
-if(WITH_DOCS)
-  option(WITH_INTERNAL_DOCS "Generate internal developer documentatin" OFF)
-  if(WITH_INTERNAL_DOCS)
+if(BUILD_DOCUMENTATION OR BUILD_INTERNAL_DOCUMENTATION)
+  set(GENERATE_INTERNAL_DOCS NO)
+
+  if(BUILD_INTERNAL_DOCUMENTATION)
     set(GENERATE_INTERNAL_DOCS YES)
+
+    if(NOT BUILD_DOCUMENTATION)
+      set(BUILD_DOCUMENTATION          ON CACHE BOOL "Build the libdabdecode documentation." FORCE)
+    endif()
   endif()
 
   find_package(Doxygen REQUIRED)
@@ -46,3 +57,4 @@ if(WITH_DOCS)
                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                     COMMENT "Generating API documentation" VERBATIM)
 endif()
+
