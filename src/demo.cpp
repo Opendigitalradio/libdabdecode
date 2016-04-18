@@ -68,7 +68,7 @@ int main()
           {
           auto eid = fig10->ensembleId;
           std::cout << "Ensemble: \n"
-                    << "\tID = " << eid << '\n'
+                    << "\tID = " << std::hex << eid << '\n'
                     << "\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
                     << '\n';
           }
@@ -76,7 +76,7 @@ int main()
           {
           auto eid = fig11->serviceId;
           std::cout << "\tProgramme Service: \n"
-                    << "\t\tID = " << eid << '\n'
+                    << "\t\tID = " << std::hex << eid << '\n'
                     << "\t\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
                     << '\n';
           }
@@ -84,7 +84,7 @@ int main()
           {
           auto eid = fig15->serviceId;
           std::cout << "\tData Service: \n"
-                    << "\t\tID = " << eid << '\n'
+                    << "\t\tID = " << std::hex << eid << '\n'
                     << "\t\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
                     << '\n';
           }
