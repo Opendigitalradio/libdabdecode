@@ -14,6 +14,11 @@ namespace dabdecode
     return m_dataField.size();
     }
 
+  std::shared_ptr<extension> fig::extension() const
+    {
+    return m_extension;
+    }
+
   std::shared_ptr<fig> make_fig(std::vector<uint8_t> const & data)
     {
     auto type = (data[0] >> 5) & 7;
@@ -26,6 +31,8 @@ namespace dabdecode
       {
       case 0:
         return std::make_shared<fig_0>(std::vector<uint8_t>{beginIterator, endIterator});
+      case 1:
+        return std::make_shared<fig_1>(std::vector<uint8_t>{beginIterator, endIterator});
       default:
         return std::make_shared<fig>(std::vector<uint8_t>{beginIterator, endIterator});
       }

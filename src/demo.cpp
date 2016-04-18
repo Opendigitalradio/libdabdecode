@@ -1,9 +1,11 @@
 #include "frame/frame.h"
+#include "frame/fib/fig/figs.h"
 
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <typeinfo>
 
 std::vector<float> get_frame(std::ifstream & sync, std::ifstream & data)
   {
@@ -62,7 +64,14 @@ int main()
       {
       for(auto const & fig : fib.figs())
         {
-        std::cout << "FIG of length" << fig->length() << '\n';
+        if(auto fig10 = dynamic_cast<dabdecode::fig_1::extension_0 const *>(fig->extension().get()))
+          {
+          auto eid = fig10->ensembleId;
+          std::cout << "Ensemble: \n"
+                    << "\tID = " << eid << '\n'
+                    << "\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
+                    << '\n';
+          }
         }
       }
     }

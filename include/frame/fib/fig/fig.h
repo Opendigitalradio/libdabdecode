@@ -17,8 +17,11 @@ namespace dabdecode
 
     std::size_t length() const;
 
+    std::shared_ptr<struct extension> extension() const;
+
     protected:
       std::vector<uint8_t> const m_dataField;
+      std::shared_ptr<struct extension> m_extension{};
     };
 
   /*
