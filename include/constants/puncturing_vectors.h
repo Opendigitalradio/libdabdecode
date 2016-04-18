@@ -89,7 +89,7 @@ namespace dabdecode
      * constraint length of 7, which results in 6 tail bits to clear the encoder shift registers.
      * Since DAB uses a 1/4 code, 6 input bits result in 24 output bits thus resulting in a
      * puncturing vector length of 24. For the rationale on the type choice, please refer to
-     * ::dabdecode::regular_puncturing_vector_t.
+     * ::regular_puncturing_vector_t.
      */
     using tail_puncturing_vector_t = std::array<uint8_t, 24>;
 
