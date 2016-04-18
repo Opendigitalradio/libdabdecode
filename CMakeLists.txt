@@ -21,14 +21,28 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined")
 endif()
 
-option(WITH_TESTS "Build and run the unit tests" ON)
-
 include_directories("include")
 include_directories(SYSTEM "third_party/cute")
 
 add_subdirectory("src")
 
+option(WITH_TESTS "Build and run the unit tests" ON)
 if(WITH_TESTS)
   include(CUTE)
   add_subdirectory(test)
+endif()
+
+option(WITH_DOCS "Build the libdabdecode documentation" OFF)
+set(GENERATE_INTERNAL_DOCS NO)
+if(WITH_DOCS)
+  option(WITH_INTERNAL_DOCS "Generate internal developer documentatin" OFF)
+  if(WITH_INTERNAL_DOCS)
+    set(GENERATE_INTERNAL_DOCS YES)
+  endif()
+
+  find_package(Doxygen REQUIRED)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc ALL ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                    COMMENT "Generating API documentation" VERBATIM)
 endif()
