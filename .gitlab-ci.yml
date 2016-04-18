@@ -60,7 +60,7 @@ doc-internal:
       - build/doc/html
       - build/doc/latex/refman.pdf
 
-doc-internal:
+doc-public:
   script:
     - cd build
     - cmake .. -DBUILD_DOCUMENTATION_ONLY=ON -DBUILD_INTERNAL_DOCUMENTATION=OFF
