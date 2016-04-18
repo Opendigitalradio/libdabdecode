@@ -18,6 +18,8 @@ namespace dabdecode
 
     std::vector<float> depuncture_fic_codeword(std::vector<float> && codeword, std::size_t const mode)
       {
+      using namespace constants;
+
       std::vector<float> depunctured(punctured_codeword_size(mode) * 4 / 3 + 24);
       auto inputIndex = std::size_t{};
       auto outputIndex = std::size_t{};
@@ -125,6 +127,8 @@ namespace dabdecode
 
   void frame::extract_fic_codewords()
     {
+    using namespace constants;
+
     auto const puncturedCodewordSize = punctured_codeword_size(m_mode);
     auto const ficSize = fic_size(m_mode);
     auto nofCodewords = ficSize / puncturedCodewordSize;

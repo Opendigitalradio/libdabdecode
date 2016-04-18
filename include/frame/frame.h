@@ -21,7 +21,10 @@ namespace dabdecode
     private:
       void extract_fic_codewords();
 
-      fsm const m_fsm{kEncoderInputLength, kEncoderOutputLength, {kEncoderPolynomials.cbegin(), kEncoderPolynomials.cend()}};
+      fsm const m_fsm{constants::kEncoderInputLength,
+                      constants::kEncoderOutputLength,
+                      {constants::kEncoderPolynomials.cbegin(), constants::kEncoderPolynomials.cend()}};
+
       std::vector<float> const m_data;
       std::size_t const m_mode;
 

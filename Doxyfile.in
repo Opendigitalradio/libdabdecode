@@ -42,8 +42,10 @@ SHOW_NAMESPACES        = YES
 SORT_MEMBERS_CTORS_1ST = YES
 QUIET                  = YES
 WARN_IF_UNDOCUMENTED   = NO
-INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/include
-FILE_PATTERNS          = *.h
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/include \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doc
+FILE_PATTERNS          = *.h \
+                         *.dox
 RECURSIVE              = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
