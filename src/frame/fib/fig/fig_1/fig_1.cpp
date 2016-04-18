@@ -22,6 +22,15 @@ namespace dabdecode
       case 0:
         m_extension = std::make_shared<extension_0>(uint16_t((((uint16_t) m_dataField[1]) << 8) | m_dataField[2]));
         break;
+      case 1:
+        m_extension = std::make_shared<extension_1>(uint16_t((((uint16_t) m_dataField[1]) << 8) | m_dataField[2]));
+        break;
+      case 5:
+        m_extension = std::make_shared<extension_5>(uint32_t((((uint32_t) m_dataField[1]) << 24) |
+                                                             (((uint32_t) m_dataField[2]) << 16) |
+                                                             (((uint32_t) m_dataField[3]) <<  8) |
+                                                             m_dataField[4]));
+        break;
       default:
         break;
       }

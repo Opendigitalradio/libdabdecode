@@ -72,6 +72,22 @@ int main()
                     << "\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
                     << '\n';
           }
+        else if(auto fig11 = dynamic_cast<dabdecode::fig_1::extension_1 const *>(fig->extension().get()))
+          {
+          auto eid = fig11->serviceId;
+          std::cout << "\tProgramme Service: \n"
+                    << "\t\tID = " << eid << '\n'
+                    << "\t\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
+                    << '\n';
+          }
+        else if(auto fig15 = dynamic_cast<dabdecode::fig_1::extension_5 const *>(fig->extension().get()))
+          {
+          auto eid = fig15->serviceId;
+          std::cout << "\tData Service: \n"
+                    << "\t\tID = " << eid << '\n'
+                    << "\t\tLabel = " << (std::string)dynamic_cast<dabdecode::fig_1 const &>(*fig)
+                    << '\n';
+          }
         }
       }
     }
