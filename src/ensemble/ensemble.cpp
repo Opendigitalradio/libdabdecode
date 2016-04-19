@@ -1,8 +1,7 @@
 #include "ensemble/ensemble.h"
-#include "frame/fib/fib.h"
-#include "frame/fib/fig/figs.h"
-#include "mode/modes.h"
 #include "ensemble/subchannel_descriptor.h"
+#include "frame/fib.h"
+#include "mode/modes.h"
 
 #include <iostream>
 #include <vector>
@@ -18,7 +17,7 @@ namespace dabdecode
     update();
     }
 
-  std::string const & ensemble::name() const
+  std::string const & ensemble::label() const
     {
     return m_name;
     }
@@ -34,13 +33,7 @@ namespace dabdecode
       {
       for(auto const & fib : m_frame->fic())
         {
-        for(auto const & fig : fib.figs())
-          {
-          if(fig)
-            {
-            fig->dispatch(*this);
-            }
-          }
+        (void)fib;
         }
       }
     else
@@ -90,41 +83,6 @@ namespace dabdecode
 
     m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
     return (bool)m_frame;
-    }
-
-  void ensemble::handle(fig_0 const & mci)
-    {
-    if(auto extension = mci.ext())
-      {
-      switch(extension->type())
-        {
-        case 0:
-          m_id = ((fig_0::extension_0 const *) extension)->ensembleId;
-          break;
-        case 1:
-          break;
-        default:
-          break;
-        }
-      }
-    }
-
-  void ensemble::handle(fig_1 const & label)
-    {
-    if(auto extension = label.ext())
-      {
-      switch(extension->type())
-        {
-        case 0:
-          if(m_id == ((fig_1::extension_0 const *)extension)->ensembleId)
-            {
-            m_name = static_cast<std::string>(label);
-            }
-          break;
-        default:
-          break;
-        }
-      }
     }
 
   }

@@ -10,7 +10,7 @@ int main()
 
   if(!syncStream)
     {
-    std::cerr << "Could not open frame stream!\n";
+    std::cerr << "Could not open synchronization stream!\n";
     return 1;
     }
 
@@ -26,7 +26,7 @@ int main()
     {
     if(ensemble)
       {
-      std::cout << "Ensemble \"" << ensemble.name() << "\" @ " << std::hex << ensemble.id() << '\n';
+      std::cout << "Ensemble \"" << ensemble.label() << "\" @ " << std::hex << ensemble.id() << '\n';
       }
 
     ensemble.update();

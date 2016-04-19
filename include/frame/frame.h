@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "constants/convolution_encoder_attributes.h"
-#include "fib/fib.h"
 #include "viterbi/fsm.h"
 #include "mode/transport_mode.h"
 
@@ -16,7 +15,7 @@ namespace dabdecode
     {
     frame(std::vector<float> && data, transport_mode const mode);
 
-    std::vector<fib> fic();
+    std::vector<struct fib> fic();
 
     private:
       void extract_fic_codewords();

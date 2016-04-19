@@ -1,14 +1,12 @@
 #include "constants/puncturing_vectors.h"
+#include "frame/fib.h"
 #include "frame/frame.h"
-#include "frame/fib/fib.h"
 #include "mode/modes.h"
 #include "viterbi/core_algorithms.h"
 
 #include <memory>
 #include <stdexcept>
 #include <string>
-
-#include <iostream>
 
 namespace dabdecode
   {
@@ -118,7 +116,7 @@ namespace dabdecode
       {
       for(std::size_t fibIdx{}; fibIdx < fibs_in_codeword(m_mode); ++fibIdx)
         {
-        fic.emplace_back(std::vector<uint8_t>{cw.cbegin() + fibIdx * 32, cw.cbegin() + (fibIdx + 1) * 32});
+        fic.emplace_back(cw.cbegin() + fibIdx * 32, cw.cbegin() + (fibIdx + 1) * 32);
         }
       }
 
