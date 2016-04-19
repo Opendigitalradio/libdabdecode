@@ -14,7 +14,7 @@ namespace dabdecode
     return m_dataField.size();
     }
 
-  std::shared_ptr<extension> fig::extension() const
+  extension const * fig::ext() const
     {
     return m_extension;
     }
@@ -34,7 +34,7 @@ namespace dabdecode
       case 1:
         return std::make_shared<fig_1>(std::vector<uint8_t>{beginIterator, endIterator});
       default:
-        return std::make_shared<fig>(std::vector<uint8_t>{beginIterator, endIterator});
+        return {};
       }
     }
 

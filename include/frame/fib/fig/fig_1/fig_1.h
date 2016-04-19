@@ -13,22 +13,27 @@ namespace dabdecode
     struct extension_0 : extension
       {
       extension_0(uint16_t const id);
+      uint8_t type() const override;
       uint16_t const ensembleId;
       };
 
     struct extension_1 : extension
       {
       extension_1(uint16_t const id);
+      uint8_t type() const override;
       uint16_t const serviceId;
       };
 
     struct extension_5 : extension
       {
       extension_5(uint32_t const id);
+      uint8_t type() const override;
       uint32_t const serviceId;
       };
 
     fig_1(std::vector<uint8_t> const & data);
+
+    virtual void dispatch(ensemble & target) const override;
 
     explicit operator std::string() const;
 

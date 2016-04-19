@@ -20,6 +20,7 @@ namespace dabdecode
     virtual ~extension() = default;
 
     std::size_t length() const;
+    virtual uint8_t type() const = 0;
 
     protected:
       std::vector<uint8_t> const m_dataField;

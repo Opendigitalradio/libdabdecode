@@ -1,4 +1,5 @@
 #include "frame/fib/fig/fig_0/fig_0.h"
+#include "ensemble/ensemble.h"
 
 namespace dabdecode
   {
@@ -11,6 +12,11 @@ namespace dabdecode
     m_isData  = m_dataField[0] >> 5 & 1;
 
     m_extension = m_dataField[0] & 31;
+    }
+
+  void fig_0::dispatch(ensemble & target) const
+    {
+    target.handle(*this);
     }
 
   }

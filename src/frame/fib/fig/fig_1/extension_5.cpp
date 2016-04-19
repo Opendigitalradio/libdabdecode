@@ -13,5 +13,10 @@ namespace dabdecode
 
     }
 
+  uint8_t fig_1::extension_5::type() const
+    {
+    return 5;
+    }
+
   }
 

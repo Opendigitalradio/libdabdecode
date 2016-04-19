@@ -10,6 +10,8 @@ namespace dabdecode
     {
     fig_0(std::vector<uint8_t> const & data);
 
+    virtual void dispatch(ensemble & target) const override;
+
     private:
       std::vector<uint8_t> m_content{};
 

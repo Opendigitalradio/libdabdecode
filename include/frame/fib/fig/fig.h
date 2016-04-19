@@ -9,6 +9,9 @@
 namespace dabdecode
   {
 
+  struct extension;
+  struct ensemble;
+
   struct fig
     {
     fig(std::vector<uint8_t> const & data);
@@ -17,11 +20,13 @@ namespace dabdecode
 
     std::size_t length() const;
 
-    std::shared_ptr<struct extension> extension() const;
+    virtual void dispatch(ensemble & target) const = 0;
+
+    extension const * ext() const;
 
     protected:
       std::vector<uint8_t> const m_dataField;
-      std::shared_ptr<struct extension> m_extension{};
+      extension * m_extension{};
     };
 
   /*
