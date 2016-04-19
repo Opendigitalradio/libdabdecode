@@ -11,6 +11,7 @@ set(LIB_SOURCES viterbi/calc_metric.cpp
                 frame/fib/fig/extension.cpp
                 frame/fib/fig/fig.cpp
                 frame/fib/fig/fig_0/fig_0.cpp
+                frame/fib/fig/fig_0/extension_0.cpp
                 frame/fib/fig/fig_1/fig_1.cpp
                 frame/fib/fig/fig_1/extension_0.cpp
                 frame/fib/fig/fig_1/extension_1.cpp

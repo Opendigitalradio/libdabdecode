@@ -91,8 +91,19 @@ namespace dabdecode
     return (bool)m_frame;
     }
 
-  void ensemble::handle(fig_0 const &)
+  void ensemble::handle(fig_0 const & mci)
     {
+    if(auto extension = mci.ext())
+      {
+      switch(extension->type())
+        {
+        case 0:
+          m_id = ((fig_0::extension_0 const *) extension)->ensembleId;
+          break;
+        default:
+          break;
+        }
+      }
     }
 
   void ensemble::handle(fig_1 const & label)
@@ -102,8 +113,10 @@ namespace dabdecode
       switch(extension->type())
         {
         case 0:
-          m_id = ((fig_1::extension_0 const *)extension)->ensembleId;
-          m_name = static_cast<std::string>(label);
+          if(m_id == ((fig_1::extension_0 const *)extension)->ensembleId)
+            {
+            m_name = static_cast<std::string>(label);
+            }
           break;
         default:
           break;

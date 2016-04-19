@@ -1,6 +1,8 @@
 #include "frame/fib/fig/fig_0/fig_0.h"
 #include "ensemble/ensemble.h"
 
+#include <iostream>
+
 namespace dabdecode
   {
 
@@ -11,12 +13,24 @@ namespace dabdecode
     m_isOther = m_dataField[0] >> 6 & 1;
     m_isData  = m_dataField[0] >> 5 & 1;
 
-    m_extension = m_dataField[0] & 31;
+    parse_extension();
     }
 
   void fig_0::dispatch(ensemble & target) const
     {
     target.handle(*this);
+    }
+
+  void fig_0::parse_extension()
+    {
+    switch(m_dataField[0] & 63)
+      {
+      case 0:
+        m_extension = new extension_0{{m_dataField.begin() + 1, m_dataField.end()}};
+        break;
+      default:
+        break;
+      }
     }
 
   }
