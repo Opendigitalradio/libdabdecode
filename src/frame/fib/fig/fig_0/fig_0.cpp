@@ -28,6 +28,9 @@ namespace dabdecode
       case 0:
         m_extension = new extension_0{{m_dataField.begin() + 1, m_dataField.end()}};
         break;
+      case 1:
+        m_extension = new extension_1{{m_dataField.begin() + 1, m_dataField.end()}};
+        break;
       default:
         break;
       }

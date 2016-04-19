@@ -28,6 +28,15 @@ namespace dabdecode
       uint8_t const occcurenceChange;
       };
 
+    struct extension_1 : extension
+      {
+      extension_1(std::vector<uint8_t> && data);
+
+      uint8_t type() const override;
+
+      std::vector<struct subchannel_descriptor> descriptors;
+      };
+
     fig_0(std::vector<uint8_t> const & data);
 
     virtual void dispatch(ensemble & target) const override;

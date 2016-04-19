@@ -2,6 +2,7 @@
 #include "frame/fib/fib.h"
 #include "frame/fib/fig/figs.h"
 #include "mode/modes.h"
+#include "ensemble/subchannel_descriptor.h"
 
 #include <iostream>
 #include <vector>
@@ -99,6 +100,8 @@ namespace dabdecode
         {
         case 0:
           m_id = ((fig_0::extension_0 const *) extension)->ensembleId;
+          break;
+        case 1:
           break;
         default:
           break;
