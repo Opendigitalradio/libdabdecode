@@ -61,22 +61,20 @@ namespace dabdecode
       return false;
       }
 
-    auto symbol_size = 1536 * 2;
-
     auto synced = '\0';
     auto extracted = std::vector<float>(sizeof(float) * frame_size(m_mode));
     auto input = reinterpret_cast<char *>(extracted.data());
 
     while(m_sync >> synced && !synced)
       {
-      m_data.ignore(sizeof(float) * symbol_size);
+      m_data.ignore(sizeof(float) * symbol_size(m_mode));
       }
 
-    m_data.read(input, sizeof(float) * symbol_size);
+    m_data.read(input, sizeof(float) * symbol_size(m_mode));
 
-    for(std::size_t symbol{1}; symbol < 75; ++symbol)
+    for(std::size_t symbol{1}; symbol < frame_symbols(m_mode); ++symbol)
       {
-      if(!m_data.read(input + symbol * sizeof(float) * symbol_size, sizeof(float) * symbol_size))
+      if(!m_data.read(input + symbol * sizeof(float) * symbol_size(m_mode), sizeof(float) * symbol_size(m_mode)))
         {
         m_frame.reset();
         return false;
@@ -95,7 +93,6 @@ namespace dabdecode
 
   void ensemble::handle(fig_0 const &)
     {
-
     }
 
   void ensemble::handle(fig_1 const & label)

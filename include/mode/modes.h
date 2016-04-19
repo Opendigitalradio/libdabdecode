@@ -76,6 +76,10 @@ namespace dabdecode
 
   std::size_t fibs_in_codeword(transport_mode const mode) noexcept;
 
+  std::size_t frame_symbols(transport_mode const mode) noexcept;
+
+  std::size_t symbol_size(transport_mode const mode) noexcept;
+
   }
 
 #endif

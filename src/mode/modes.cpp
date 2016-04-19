@@ -102,5 +102,43 @@ namespace dabdecode
       }
     }
 
+  std::size_t frame_symbols(transport_mode const mode) noexcept
+    {
+    switch(mode)
+      {
+      case transport_mode::mode_1:
+        return mode_1::frame_symbols::value / 256;
+        break;
+      case transport_mode::mode_2:
+        return mode_2::frame_symbols::value / 256;
+        break;
+      case transport_mode::mode_3:
+        return mode_3::frame_symbols::value / 256;
+        break;
+      case transport_mode::mode_4:
+        return mode_4::frame_symbols::value / 256;
+        break;
+      }
+    }
+
+  std::size_t symbol_size(transport_mode const mode) noexcept
+    {
+    switch(mode)
+      {
+      case transport_mode::mode_1:
+        return mode_1::carriers::value * 2;
+        break;
+      case transport_mode::mode_2:
+        return mode_2::carriers::value * 2;
+        break;
+      case transport_mode::mode_3:
+        return mode_3::carriers::value * 2;
+        break;
+      case transport_mode::mode_4:
+        return mode_4::carriers::value * 2;
+        break;
+      }
+    }
+
   }
 
