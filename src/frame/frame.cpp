@@ -112,12 +112,23 @@ namespace dabdecode
     {
     std::vector<fib> fic{};
 
-    for(auto const & cw : m_ficCodewords)
+    for(auto & cw : m_ficCodewords)
       {
       for(std::size_t fibIdx{}; fibIdx < fibs_in_codeword(m_mode); ++fibIdx)
         {
-        fic.emplace_back(cw.cbegin() + fibIdx * 32, cw.cbegin() + (fibIdx + 1) * 32);
+        cw[fibIdx * 32 + 30] = ~cw[fibIdx * 32 + 30];
+        cw[fibIdx * 32 + 31] = ~cw[fibIdx * 32 + 31];
+
+        auto fibStart = cw.begin() + fibIdx * 32;
+        auto fibEnd = fibStart + 32;
+        auto fib = dabdecode::fib{fibStart, fibEnd};
+
+        if(fib)
+          {
+          fic.push_back(std::move(fib));
+          }
         }
+
       }
 
     return fic;
@@ -153,9 +164,10 @@ namespace dabdecode
                                  depunctured.data(),
                                  deconvolved.get());
 
-      m_ficCodewords.emplace_back(deconvolved.get(), deconvolved.get() + fic_codeword_size(m_mode));
-      descramble_fic_codeword(m_ficCodewords.back(), m_mode);
-      assemble_bytes(m_ficCodewords.back());
+      auto cw = std::vector<uint8_t>{deconvolved.get(), deconvolved.get() + fic_codeword_size(m_mode)};
+      descramble_fic_codeword(cw, m_mode);
+      assemble_bytes(cw);
+      m_ficCodewords.push_back(std::move(cw));
 
       beginIterator += puncturedCodewordSize;
       endIterator = beginIterator + puncturedCodewordSize;

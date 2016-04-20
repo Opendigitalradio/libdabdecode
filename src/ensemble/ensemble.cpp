@@ -19,7 +19,7 @@ namespace dabdecode
 
   std::string const & ensemble::label() const
     {
-    return m_name;
+    return m_label;
     }
 
   std::uint16_t ensemble::id() const
@@ -27,25 +27,38 @@ namespace dabdecode
     return m_id;
     }
 
+  void ensemble::label(std::string const & label)
+    {
+    m_label = label;
+    }
+
+  void ensemble::id(std::uint16_t const id)
+    {
+    m_id = id;
+    }
+
   void ensemble::update()
     {
     if(next_frame())
       {
-      for(auto const & fib : m_frame->fic())
+      auto fic = m_frame->fic();
+
+      for(auto const & fib : fic)
         {
-        (void)fib;
+        parse_fib(fib, *this);
         }
+
       }
     else
       {
       m_id = 0;
-      m_name = "";
+      m_label = "";
       }
     }
 
   ensemble::operator bool() const
     {
-    return m_name.size() && m_id;
+    return m_label.size() && m_id;
     }
 
   bool ensemble::next_frame()
@@ -74,7 +87,7 @@ namespace dabdecode
         return false;
         }
 
-      if(!m_sync.ignore(sizeof(synced)))
+      if(!m_sync.ignore(1))
         {
         m_frame.reset();
         return false;

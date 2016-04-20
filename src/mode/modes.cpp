@@ -107,16 +107,16 @@ namespace dabdecode
     switch(mode)
       {
       case transport_mode::mode_1:
-        return mode_1::frame_symbols::value / 256;
+        return mode_1::frame_symbols::value;
         break;
       case transport_mode::mode_2:
-        return mode_2::frame_symbols::value / 256;
+        return mode_2::frame_symbols::value;
         break;
       case transport_mode::mode_3:
-        return mode_3::frame_symbols::value / 256;
+        return mode_3::frame_symbols::value;
         break;
       case transport_mode::mode_4:
-        return mode_4::frame_symbols::value / 256;
+        return mode_4::frame_symbols::value;
         break;
       }
     }

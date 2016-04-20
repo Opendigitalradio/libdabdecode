@@ -31,12 +31,12 @@ namespace dabdecode
 
     operator bool() const;
 
-    iterator begin();
-    iterator end();
+    iterator begin() const;
+    iterator end() const;
 
     private:
-      iterator const & m_begin;
-      iterator const & m_end;
+      iterator const m_begin;
+      iterator const m_end;
     };
 
   }

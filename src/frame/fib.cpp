@@ -17,27 +17,23 @@ namespace dabdecode
     boost::crc_ccitt_type checker{};
     auto it = m_begin;
 
-    while(it != m_begin + 30)
-      {
-      checker.process_byte(*it++);
-      }
-
     while(it != m_end)
       {
-      checker.process_byte(~*it++);
+      checker.process_byte(*it);
+      ++it;
       }
 
     return !checker.checksum();
     }
 
-  fib::iterator fib::begin()
+  fib::iterator fib::begin() const
     {
     return m_begin;
     }
 
-  fib::iterator fib::end()
+  fib::iterator fib::end() const
     {
-    return m_end;
+    return m_end - 2;
     }
 
   }
