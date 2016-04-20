@@ -34,7 +34,7 @@ namespace dabdecode
 
       if(ensembleId == target.id())
         {
-        target.label({start + 1, start + 1 + 16});
+        target.label({start + 2, start + 2 + 16});
         }
       }
 
