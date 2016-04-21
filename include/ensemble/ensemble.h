@@ -3,6 +3,7 @@
 
 #include "frame/frame.h"
 #include "mode/transport_mode.h"
+#include "parser/fic_parser.h"
 
 #include <cstdint>
 #include <iosfwd>
@@ -12,7 +13,7 @@
 namespace dabdecode
   {
 
-  void parse_fib(struct fib const & block, struct ensemble & target);
+  struct fic_parser;
 
   struct ensemble
     {
@@ -25,21 +26,24 @@ namespace dabdecode
 
     explicit operator bool() const;
 
-    void label(std::string const & label);
-
-    void id(std::uint16_t const id);
-
     private:
       bool next_frame();
+
+      void label(std::string const & label);
+      void id(std::uint16_t const id);
 
       std::istream & m_sync;
       std::istream & m_data;
       transport_mode const m_mode;
 
+      fic_parser m_ficParser{*this};
+
       std::unique_ptr<frame> m_frame{};
 
       std::string m_label;
       std::uint16_t m_id;
+
+      friend fic_parser;
     };
 
   }

@@ -41,13 +41,8 @@ namespace dabdecode
     {
     if(next_frame())
       {
-      auto fic = m_frame->fic();
-
-      for(auto const & fib : fic)
-        {
-        parse_fib(fib, *this);
-        }
-
+      auto const & fic = m_frame->fic();
+      m_ficParser.parse(fic);
       }
     else
       {

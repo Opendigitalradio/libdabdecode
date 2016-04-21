@@ -8,8 +8,12 @@ set(LIB_SOURCES viterbi/calc_metric.cpp
 
                 frame/frame.cpp
                 frame/fib.cpp
+
                 ensemble/ensemble.cpp
-                ensemble/parse_fib.cpp)
+
+                parser/fic_parser.cpp
+                parser/fic_parser_fig_0.cpp
+                parser/fic_parser_fig_1.cpp)
 
 
 add_library(dabdecode_static STATIC ${LIB_SOURCES})
