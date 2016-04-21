@@ -19,8 +19,9 @@ namespace dabdecode
     private:
       using iterator = fib::iterator;
 
-      void fig_0(iterator const & base);
+      void fig_0(iterator const & base, iterator const & end);
       void fig_0_ext_0(iterator const & base);
+      void fig_0_ext_1(iterator const & base, iterator const & end);
 
       void fig_1(iterator const & base);
       void fig_1_ext_0(iterator const & base);

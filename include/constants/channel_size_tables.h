@@ -81,6 +81,14 @@ namespace dabdecode
       {192, 5, 384},                {280, 3, 384},                {416, 1, 384},
     }};
 
+    constexpr std::uint16_t eep_table_bitrate(std::uint8_t const option, std::uint16_t const size, std::uint8_t const level)
+      {
+      return !option ?
+                     (size * 8 / (!level ? 12 : level == 1 ? 8 : level == 2 ?  6 : 4))
+                     :
+                     (size * 32 / (!level ? 27 : level == 1 ? 21 : level == 2 ? 18 : 15));
+      }
+
     }
 
   }

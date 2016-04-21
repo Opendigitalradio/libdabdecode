@@ -26,7 +26,7 @@ namespace dabdecode
         switch(figType)
           {
           case 0:
-            fig_0(fibBase);
+            fig_0(fibBase, fibBase + figSize);
             break;
           case 1:
             fig_1(fibBase);
