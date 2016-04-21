@@ -1,6 +1,6 @@
 #include "ensemble/ensemble.h"
-#include "frame/fib/fib.h"
-#include "frame/fib/fig/figs.h"
+#include "ensemble/subchannel_descriptor.h"
+#include "frame/fib.h"
 #include "mode/modes.h"
 
 #include <iostream>
@@ -17,9 +17,9 @@ namespace dabdecode
     update();
     }
 
-  std::string const & ensemble::name() const
+  std::string const & ensemble::label() const
     {
-    return m_name;
+    return m_label;
     }
 
   std::uint16_t ensemble::id() const
@@ -27,31 +27,33 @@ namespace dabdecode
     return m_id;
     }
 
+  void ensemble::label(std::string const & label)
+    {
+    m_label = label;
+    }
+
+  void ensemble::id(std::uint16_t const id)
+    {
+    m_id = id;
+    }
+
   void ensemble::update()
     {
     if(next_frame())
       {
-      for(auto const & fib : m_frame->fic())
-        {
-        for(auto const & fig : fib.figs())
-          {
-          if(fig)
-            {
-            fig->dispatch(*this);
-            }
-          }
-        }
+      auto const & fic = m_frame->fic();
+      m_ficParser.parse(fic);
       }
     else
       {
       m_id = 0;
-      m_name = "";
+      m_label = "";
       }
     }
 
   ensemble::operator bool() const
     {
-    return m_name.size() && m_id;
+    return m_label.size() && m_id;
     }
 
   bool ensemble::next_frame()
@@ -80,7 +82,7 @@ namespace dabdecode
         return false;
         }
 
-      if(!m_sync.ignore(sizeof(synced)))
+      if(!m_sync.ignore(1))
         {
         m_frame.reset();
         return false;
@@ -89,39 +91,6 @@ namespace dabdecode
 
     m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
     return (bool)m_frame;
-    }
-
-  void ensemble::handle(fig_0 const & mci)
-    {
-    if(auto extension = mci.ext())
-      {
-      switch(extension->type())
-        {
-        case 0:
-          m_id = ((fig_0::extension_0 const *) extension)->ensembleId;
-          break;
-        default:
-          break;
-        }
-      }
-    }
-
-  void ensemble::handle(fig_1 const & label)
-    {
-    if(auto extension = label.ext())
-      {
-      switch(extension->type())
-        {
-        case 0:
-          if(m_id == ((fig_1::extension_0 const *)extension)->ensembleId)
-            {
-            m_name = static_cast<std::string>(label);
-            }
-          break;
-        default:
-          break;
-        }
-      }
     }
 
   }
