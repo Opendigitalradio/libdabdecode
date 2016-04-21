@@ -81,6 +81,20 @@ namespace dabdecode
       {192, 5, 384},                {280, 3, 384},                {416, 1, 384},
     }};
 
+    /**
+     * @internal
+     *
+     * @brief A function to "look up" eep bitrates
+     *
+     * Technically this is no table, but it is a very compact and useful function to
+     * translate a combination of FIG 0/1 options, sizes and protection levels into
+     * the corresponding bitrate. The tables from which this function has been derived
+     * are documented as Table 7 and Table 8 in ETSI EN 300 401 Section 6.2.1.
+     *
+     * @param option The FIG 0/1 long-form subchannel descriptor option
+     * @param size The FIG 0/1 long-form subchannel descriptor size in CUs
+     * @param level The FIG 0/1 long-form subchannel descriptor protection level
+     */
     constexpr std::uint16_t eep_table_bitrate(std::uint8_t const option, std::uint16_t const size, std::uint8_t const level)
       {
       return !option ?
