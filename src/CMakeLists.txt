@@ -10,6 +10,7 @@ set(LIB_SOURCES viterbi/calc_metric.cpp
                 frame/fib.cpp
 
                 ensemble/ensemble.cpp
+                ensemble/subchannel.cpp
 
                 parser/fic_parser.cpp
                 parser/fic_parser_fig_0.cpp

@@ -1,5 +1,4 @@
 #include "ensemble/ensemble.h"
-#include "ensemble/subchannel_descriptor.h"
 #include "frame/fib.h"
 #include "mode/modes.h"
 
@@ -27,6 +26,11 @@ namespace dabdecode
     return m_id;
     }
 
+  std::set<subchannel> const & ensemble::subchannels() const
+    {
+    return m_subchannels;
+    }
+
   void ensemble::label(std::string const & label)
     {
     m_label = label;
@@ -35,6 +39,11 @@ namespace dabdecode
   void ensemble::id(std::uint16_t const id)
     {
     m_id = id;
+    }
+
+  void ensemble::add(subchannel && subchannel)
+    {
+    m_subchannels.insert(std::move(subchannel));
     }
 
   void ensemble::update()

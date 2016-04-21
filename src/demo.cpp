@@ -26,7 +26,15 @@ int main()
     {
     if(ensemble)
       {
-      std::cout << "Ensemble \"" << ensemble.label() << "\" @ " << std::hex << ensemble.id() << '\n';
+      std::cout << "Ensemble \"" << ensemble.label() << "\" @ " << ensemble.id() << '\n';
+
+      for(auto const & subchannel : ensemble.subchannels())
+        {
+        std::cout << "\t Subchannel " << subchannel.id
+                  << " @ " << subchannel.start
+                  << " @ " << subchannel.bitrate
+                  << " kbit/s\n";
+        }
       }
 
     ensemble.update();

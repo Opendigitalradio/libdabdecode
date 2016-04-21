@@ -3,7 +3,6 @@
 #include "parser/fic_parser.h"
 
 #include <cstdint>
-#include <iostream>
 
 namespace dabdecode
   {
@@ -40,33 +39,22 @@ namespace dabdecode
     {
     for(auto pos = base; pos != end; ++pos)
       {
-      auto const subchannelId = *pos >> 2;
-      auto const startAddress = std::uint16_t(*pos & 3) << 8 | *++pos;
+      auto const subchannelId = std::uint16_t(*pos >> 2);
+      auto const startAddress = std::uint16_t(std::uint16_t(*pos & 3) << 8 | *++pos);
       auto const isLongForm = bool(*++pos >> 7);
-
-      std::cout << std::dec;
-      std::cout << "Subchannel " << subchannelId
-                << " at " << startAddress;
 
       if(!isLongForm)
         {
         auto const descriptor = constants::kUepSubchannelDescriptors[*pos & 63];
-
-        std::cout << " with length " << descriptor.size
-                  << " CUs and bitrate " << descriptor.bitrate
-                  << " kbit/s at protection level " << std::uint16_t(descriptor.protectionLevel)
-                  << " found\n";
+        m_target.add({subchannelId, startAddress, descriptor.size, descriptor.bitrate, false, 0});
         }
       else
         {
         auto const option = *pos >> 4 & 7;
         auto const protection = *pos >> 2 & 3;
-        auto const size = (std::uint16_t(*pos & 3) << 8) + *++pos;
-
-        std::cout << " with length " << size
-                  << " CUs and bitrate " << constants::eep_table_bitrate(option, size, protection)
-                  << " kbit/s at protection level " << protection + 1
-                  << (!protection ? "-A" : "-B")  << " found\n";
+        auto const size = std::uint16_t((std::uint16_t(*pos & 3) << 8) + *++pos);
+        m_target.add({subchannelId, startAddress, size, constants::eep_table_bitrate(option, size, protection),
+                      true, std::uint16_t(option << 8 | protection)});
         }
 
       }
