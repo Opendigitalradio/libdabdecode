@@ -22,6 +22,7 @@ namespace dabdecode
       void fig_0(iterator const & base, iterator const & end);
       void fig_0_ext_0(iterator const & base);
       void fig_0_ext_1(iterator const & base, iterator const & end);
+      void fig_0_ext_2(iterator const & base, iterator const & end, bool isData);
 
       void fig_1(iterator const & base);
       void fig_1_ext_0(iterator const & base);

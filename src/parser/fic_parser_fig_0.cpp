@@ -3,13 +3,15 @@
 #include "parser/fic_parser.h"
 
 #include <cstdint>
+#include <iostream>
 
 namespace dabdecode
   {
 
   void fic_parser::fig_0(fic_parser::iterator const & base, fic_parser::iterator const & end)
     {
-    auto isOther = *base >> 6 & 1;
+    auto isOther = bool(*base >> 6 & 1);
+    auto isData = bool(*base >> 5 & 1);
     auto extension = *base & 31;
 
     if(!isOther)
@@ -21,6 +23,9 @@ namespace dabdecode
           break;
         case 1:
           fig_0_ext_1(base + 1, end);
+          break;
+        case 2:
+          fig_0_ext_2(base + 1, end, isData);
           break;
         default:
           break;
@@ -60,6 +65,50 @@ namespace dabdecode
       }
     }
 
+  void fic_parser::fig_0_ext_2(fic_parser::iterator const & base, fic_parser::iterator const & end, bool isData)
+    {
+    for(auto pos = base; pos != end; ++pos)
+      {
+      auto const serviceId = isData ? std::uint32_t(*pos << 24)   |
+                                      std::uint32_t(*(pos + 1) << 16) |
+                                      std::uint32_t(*(pos + 2) << 8)  |
+                                      *(pos + 3)
+                                    : std::uint16_t(*pos << 8) |
+                                      *(pos + 1);
+      (void)serviceId;
+      if(isData)
+        {
+        pos += 3;
+        }
+      else
+        {
+        ++pos;
+        }
+
+      auto const isLocal = bool(*++pos) >> 7 & 1;
+      (void)isLocal;
+      auto const nofScs  = *pos & 15;
+
+      for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
+        {
+        auto const transportMechanismId = *++pos >> 6;
+
+        switch(transportMechanismId)
+          {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          }
+
+        pos += 1;
+        }
+      }
+    }
 
   }
 
