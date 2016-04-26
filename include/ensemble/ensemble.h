@@ -39,8 +39,41 @@ namespace dabdecode
      */
     ensemble(std::istream & sync, std::istream & data, transport_mode const mode = transport_mode::mode_1);
 
+    /**
+     * @brief Retrieve the label of the ensemble
+     *
+     * Each ensemble carries a, not necessarily unique, label. Calling this function
+     * retrieves the full lable as advertised in the respective FIGs. DAB also has the
+     * concept of short labels, that are at most 8 bytes long. Please note that this
+     * function always returns the FULL label, not the shortened one.
+     */
     std::string const & label() const;
+
+    /**
+     * @brief Retrieve the ensembles id
+     *
+     * An ensemble has a unique identifier, the so-called EnsembleId. This identifier
+     * consits of two parts, the first being a 4-bit country identifier while the second
+     * one is a 16-bit identifier that must be unique within one countries ensembles.
+     * This function returns the complete identifier. To access country id, use
+     * #country and to retrieve the national ensemble reference you can use #reference.
+     */
     std::uint16_t id() const;
+
+    /**
+     * @brief Retrieve the ensembles country id
+     *
+     * @see #id
+     */
+    std::uint8_t country() const;
+
+    /**
+     * @brief Retrieve the ensembles national reference
+     *
+     * @see #id
+     */
+    std::uint16_t reference() const;
+
     std::set<subchannel> const & subchannels() const;
 
     void update();

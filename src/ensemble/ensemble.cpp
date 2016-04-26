@@ -26,6 +26,16 @@ namespace dabdecode
     return m_id;
     }
 
+  std::uint8_t ensemble::country() const
+    {
+    return m_id >> 12;
+    }
+
+  std::uint16_t ensemble::reference() const
+    {
+    return m_id & 0xFFF;
+    }
+
   std::set<subchannel> const & ensemble::subchannels() const
     {
     return m_subchannels;
