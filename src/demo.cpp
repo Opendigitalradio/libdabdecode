@@ -28,12 +28,9 @@ int main()
       {
       std::cout << "Ensemble \"" << ensemble.label() << "\" @ " << ensemble.id() << '\n';
 
-      for(auto const & subchannel : ensemble.subchannels())
+      for(auto const & service : ensemble.services())
         {
-        std::cout << "\t Subchannel " << subchannel.id
-                  << " @ " << subchannel.start
-                  << " @ " << subchannel.bitrate
-                  << " kbit/s\n";
+        std::cout << "\t Service " << service.id() << '\n';
         }
       }
 

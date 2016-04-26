@@ -2,6 +2,7 @@
 #define __DABDECODE_ENSEMBLE__ENSEMBLE
 
 #include "ensemble/subchannel.h"
+#include "ensemble/service.h"
 #include "frame/frame.h"
 #include "mode/transport_mode.h"
 #include "parser/fic_parser.h"
@@ -76,6 +77,8 @@ namespace dabdecode
 
     std::set<subchannel> const & subchannels() const;
 
+    std::set<service> const & services() const;
+
     void update();
 
     explicit operator bool() const;
@@ -86,6 +89,7 @@ namespace dabdecode
       void label(std::string const & label);
       void id(std::uint16_t const id);
       void add(subchannel && subchannel);
+      void add(service && service);
 
       std::istream & m_sync;
       std::istream & m_data;
@@ -94,6 +98,7 @@ namespace dabdecode
       fic_parser m_ficParser{*this};
       std::unique_ptr<frame> m_frame{};
       std::set<subchannel> m_subchannels{};
+      std::set<service> m_services{};
       std::string m_label{};
       std::uint16_t m_id{};
 

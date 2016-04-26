@@ -1,6 +1,8 @@
 #include "constants/channel_size_tables.h"
 #include "ensemble/ensemble.h"
 #include "parser/fic_parser.h"
+#include "ensemble/service.h"
+#include "ensemble/service_component.h"
 
 #include <cstdint>
 #include <iostream>
@@ -75,7 +77,7 @@ namespace dabdecode
                                       *(pos + 3)
                                     : std::uint16_t(*pos << 8) |
                                       *(pos + 1);
-      (void)serviceId;
+
       if(isData)
         {
         pos += 3;
@@ -85,28 +87,21 @@ namespace dabdecode
         ++pos;
         }
 
-      auto const isLocal = bool(*++pos) >> 7 & 1;
-      (void)isLocal;
+      auto const isLocal = bool(*++pos >> 7 & 1);
       auto const nofScs  = *pos & 15;
+
+      auto srv = service{serviceId, isLocal};
 
       for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
         {
-        auto const transportMechanismId = *++pos >> 6;
+        auto const transportMechanism = transport_mechanism(*++pos >> 6);
 
-        switch(transportMechanismId)
-          {
-          case 0:
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-          case 3:
-            break;
-          }
-
+        srv.add(service_component{std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
+                                  transportMechanism, bool(*(pos + 1) >> 1 & 1), bool(*(pos + 1) & 1)});
         pos += 1;
         }
+
+      m_target.add(std::move(srv));
       }
     }
 

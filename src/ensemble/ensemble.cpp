@@ -1,4 +1,5 @@
 #include "ensemble/ensemble.h"
+#include "ensemble/service.h"
 #include "frame/fib.h"
 #include "mode/modes.h"
 
@@ -41,6 +42,11 @@ namespace dabdecode
     return m_subchannels;
     }
 
+  std::set<service> const & ensemble::services() const
+    {
+    return m_services;
+    }
+
   void ensemble::label(std::string const & label)
     {
     m_label = label;
@@ -54,6 +60,11 @@ namespace dabdecode
   void ensemble::add(subchannel && subchannel)
     {
     m_subchannels.insert(std::move(subchannel));
+    }
+
+  void ensemble::add(service && service)
+    {
+    m_services.insert(std::move(service));
     }
 
   void ensemble::update()
