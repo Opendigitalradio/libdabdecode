@@ -32,6 +32,8 @@ include_directories(SYSTEM "third_party/cute")
 if(BUILD_DOCUMENTATION_ONLY)
   set(BUILD_DOCUMENTATION          ON CACHE BOOL "Build the libdabdecode documentation." FORCE)
 else()
+  find_package(Boost REQUIRED)
+
   add_subdirectory("src")
 
   if(WITH_TESTS)
