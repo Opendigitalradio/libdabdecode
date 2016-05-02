@@ -1,0 +1,3 @@
+[submodule "sample-data"]
+	path = build/data
+	url = https://source.dab.arknet.ch/fmorgner/libdabdecode-sample-data.git
