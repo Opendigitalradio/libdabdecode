@@ -103,14 +103,54 @@ namespace dabdecode
      */
     void activate(service const & service);
 
+    /**
+     * @brief Check if the ensemble is valid
+     *
+     * This function return true iff the ensemble is in a valid state. If the ensemble
+     * is in a valid state, the list ob #services and the #label, #reference and #country
+     * may be accessed safely.
+     */
     explicit operator bool() const;
 
     private:
+      /**
+       * @internal
+       *
+       * @brief Extract the next frame
+       *
+       * This function is used to extract the next frame from the input data stream.
+       * It assembles the whole frame and stores it in #m_frame.
+       *
+       * @return true if extraction was successful, false otherwise
+       */
       bool next_frame();
 
+      /**
+       * @internal
+       *
+       * @brief Set the ensemble label
+       */
       void label(std::string const & label);
+
+      /**
+       * @internal
+       *
+       * @brief Set the ensemble id
+       */
       void id(std::uint16_t const id);
+
+      /**
+       * @internal
+       *
+       * @brief Add a subchannel to the ensemble
+       */
       void add(subchannel && subchannel);
+
+      /**
+       * @internal
+       *
+       * @brief Add a service to the ensemble
+       */
       void add(service && service);
 
       std::istream & m_sync;
