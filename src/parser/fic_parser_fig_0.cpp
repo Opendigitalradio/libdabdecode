@@ -91,6 +91,7 @@ namespace dabdecode
       auto const nofScs  = *pos & 15;
 
       auto srv = service{serviceId, isLocal};
+      srv.type(isData ? constants::service_type::data : constants::service_type::programme);
 
       for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
         {

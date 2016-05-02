@@ -37,11 +37,6 @@ namespace dabdecode
     return m_id & 0xFFF;
     }
 
-  std::set<subchannel> const & ensemble::subchannels() const
-    {
-    return m_subchannels;
-    }
-
   std::set<service> const & ensemble::services() const
     {
     return m_services;
@@ -65,6 +60,20 @@ namespace dabdecode
   void ensemble::add(service && service)
     {
     m_services.insert(std::move(service));
+    }
+
+  void ensemble::activate(service const & service)
+    {
+    auto const pos = m_services.find(service);
+    if(pos != m_services.cend())
+      {
+      auto const servicePtr = const_cast<struct service *>(&*pos);
+
+      if(servicePtr != m_activeService)
+        {
+        m_activeService = servicePtr;
+        }
+      }
     }
 
   void ensemble::update()

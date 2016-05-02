@@ -75,11 +75,33 @@ namespace dabdecode
      */
     std::uint16_t reference() const;
 
-    std::set<subchannel> const & subchannels() const;
-
+    /**
+     * @brief Access the list of services present in the ensemble
+     *
+     * This function returns the set of services that are present within
+     * the ensemble. Services might come and go during the lifetime of
+     * an ensemble. To activate the decoding of a service, you need to
+     * select a service from this set and pass it to the #activate function.
+     */
     std::set<service> const & services() const;
 
+    /**
+     * @brief Update the ensemble
+     *
+     * This function updates an ensemble from the datastream supplied during
+     * construction. This includes updating the currently active service.
+     */
     void update();
+
+    /**
+     * @brief Activate a service for decoding
+     *
+     * This function activates a service for decoding. The reference to the
+     * service might be obtained via the function #services.
+     *
+     * @see #services
+     */
+    void activate(service const & service);
 
     explicit operator bool() const;
 
@@ -101,6 +123,8 @@ namespace dabdecode
       std::set<service> m_services{};
       std::string m_label{};
       std::uint16_t m_id{};
+
+      service * m_activeService{};
 
       friend fic_parser;
     };
