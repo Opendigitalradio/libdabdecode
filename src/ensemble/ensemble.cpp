@@ -119,7 +119,7 @@ namespace dabdecode
 
           for(auto const & cif : m_frame->msc())
             {
-            selected->process(cif.begin() + start * kCuBits, cif.end() + end * kCuBits);
+            selected->process(cif.begin() + start * kCuBits, cif.begin() + end * kCuBits);
             }
           }
         }
