@@ -19,12 +19,31 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/${OUTPUT_PREFIX}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "/${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -pedantic -Wall -Wextra -Werror")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -Os")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined")
+  option(WITH_ADDRESS_SANITIZER       "Include address/memory checks." OFF)
+  option(WITH_UNDEFINED_SANITIZER     "Include undefined behavior checks." OFF)
+
+  if(WITH_ADDRESS_SANITIZER OR WITH_UNDEFINED_SANITIZER)
+    string(APPEND CMAKE_CXX_FLAGS " -fno-omit-frame-pointer")
+
+    set(SANITIZERS "")
+
+    if(WITH_ADDRESS_SANITIZER)
+      list(APPEND SANITIZERS "address")
+    endif()
+
+    if(WITH_UNDEFINED_SANITIZER)
+      list(APPEND SANITIZERS "undefined")
+    endif()
+
+    string(REPLACE ";" "," SANITIZERS "${SANITIZERS}")
+    string(APPEND CMAKE_CXX_FLAGS " -fsanitize=${SANITIZERS}")
+  endif()
 endif()
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -Os")
 
 include_directories("include")
 include_directories(SYSTEM "third_party/cute")
