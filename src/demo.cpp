@@ -30,7 +30,10 @@ int main()
 
       for(auto const & service : ensemble.services())
         {
-        std::cout << "\t Service " << service.id() << '\n';
+        if(service.type() == dabdecode::constants::service_type::data)
+          {
+          ensemble.activate(service);
+          }
         }
       }
 

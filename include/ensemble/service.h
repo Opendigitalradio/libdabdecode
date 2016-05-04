@@ -15,14 +15,17 @@ namespace dabdecode
 
   struct service : boost::less_than_comparable<service>, boost::equality_comparable<service>
     {
-    service(std::uint32_t const id, bool const isLocal);
 
     bool operator<(service const & other) const;
     bool operator==(service const & other) const;
 
     std::uint32_t id() const;
 
+    constants::service_type type() const;
+
     private:
+      service(std::uint32_t const id, bool const isLocal);
+
       void add(service_component const & component);
 
       void label(std::string && label);

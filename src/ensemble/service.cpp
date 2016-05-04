@@ -4,13 +4,6 @@
 namespace dabdecode
   {
 
-  service::service(std::uint32_t const id, bool const isLocal)
-    : m_id{id},
-      m_isLocal{isLocal}
-    {
-
-    }
-
   bool service::operator<(service const & other) const
     {
     return m_id < other.m_id;
@@ -24,6 +17,18 @@ namespace dabdecode
   std::uint32_t service::id() const
     {
     return m_id;
+    }
+
+  constants::service_type service::type() const
+    {
+    return m_type;
+    }
+
+  service::service(std::uint32_t const id, bool const isLocal)
+    : m_id{id},
+      m_isLocal{isLocal}
+    {
+
     }
 
   void service::add(service_component const & component)
