@@ -1,6 +1,7 @@
 #ifndef __DABDECODE_ENSEMBLE__SERVICE
 #define __DABDECODE_ENSEMBLE__SERVICE
 
+#include "constants/service_types"
 #include "ensemble/service_component.h"
 
 #include <boost/operators.hpp>
@@ -11,15 +12,6 @@
 
 namespace dabdecode
   {
-
-  namespace constants
-    {
-    enum struct service_type : std::uint8_t
-      {
-      programme,
-      data
-      };
-    }
 
   struct service : boost::less_than_comparable<service>, boost::equality_comparable<service>
     {
