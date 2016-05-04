@@ -84,6 +84,8 @@ namespace dabdecode
 
   std::size_t symbol_size(constants::transmission_mode const mode) noexcept;
 
+  std::size_t msc_cifs(constants::transmission_mode const mode) noexcept;
+
   }
 
 #endif

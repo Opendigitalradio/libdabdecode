@@ -46,5 +46,15 @@ namespace dabdecode
     m_type = type;
     }
 
+  std::uint16_t service::primary() const
+    {
+    return m_primaryComponent;
+    }
+
+  void service::primary(std::uint16_t const component)
+    {
+    m_primaryComponent = component;
+    }
+
   }
 

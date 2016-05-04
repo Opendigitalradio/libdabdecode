@@ -99,10 +99,18 @@ namespace dabdecode
       for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
         {
         auto const transportMechanism = constants::transport_mechanism(*++pos >> 6);
+        auto const isPrimary = bool(*(pos + 1) >> 1 & 1);
+
         auto component = service_component{std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
-                 transportMechanism, bool(*(pos + 1) >> 1 & 1), bool(*(pos + 1) & 1)};
+                 transportMechanism, isPrimary, bool(*(pos + 1) & 1)};
 
         srv.add(component);
+
+        if(isPrimary)
+          {
+          srv.primary(component.id());
+          }
+
         m_target.add(std::move(component));
         pos += 1;
         }

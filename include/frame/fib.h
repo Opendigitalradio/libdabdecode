@@ -19,7 +19,7 @@ namespace dabdecode
    * of the ensemble itself as well as the structure und information related to the different
    * services carried in an ensemble.
    *
-   * This class is designed as an overlay. It only stores references to the iterators marking the
+   * This class is designed as an overlay. It only stores iterators marking the
    * begin and end of the range of bytes that make up a FIB. The creator/user must thus guarantee
    * that the range remains valid while the FIB is in use.
    */

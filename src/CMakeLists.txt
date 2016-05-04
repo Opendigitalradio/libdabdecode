@@ -7,6 +7,7 @@ set(LIB_SOURCES viterbi/calc_metric.cpp
                 mode/modes.cpp
 
                 frame/frame.cpp
+                frame/cif.cpp
                 frame/fib.cpp
 
                 ensemble/ensemble.cpp

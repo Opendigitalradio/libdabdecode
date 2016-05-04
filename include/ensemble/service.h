@@ -58,15 +58,21 @@ namespace dabdecode
 
       void type(constants::service_type const type);
 
+      std::uint16_t primary() const;
+
+      void primary(std::uint16_t const component);
+
       std::uint32_t const m_id;
       bool const m_isLocal;
 
       std::string m_label{};
       constants::service_type m_type{constants::service_type::programme};
 
+      std::uint16_t m_primaryComponent{};
       std::set<std::uint16_t> m_components{};
 
       friend struct fic_parser;
+      friend struct ensemble;
     };
 
   }

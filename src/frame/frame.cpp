@@ -1,4 +1,6 @@
 #include "constants/puncturing_vectors.h"
+#include "constants/common.h"
+#include "frame/cif.h"
 #include "frame/fib.h"
 #include "frame/frame.h"
 #include "mode/modes.h"
@@ -134,6 +136,19 @@ namespace dabdecode
       }
 
     return fic;
+    }
+
+  std::vector<cif> frame::msc() const
+    {
+    auto msc = std::vector<cif>{};
+    auto pos = m_data.cbegin() + fic_size(m_mode);
+
+    for(std::size_t index{}; index < msc_cifs(m_mode); ++index)
+      {
+      msc.push_back(cif{pos + index * kCusPerCif * kCuBits, pos + (index + 1) * kCusPerCif * kCuBits});
+      }
+
+    return msc;
     }
 
   void frame::extract_fic_codewords()

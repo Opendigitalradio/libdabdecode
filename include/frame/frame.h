@@ -17,6 +17,8 @@ namespace dabdecode
 
     std::vector<struct fib> fic();
 
+    std::vector<struct cif> msc() const;
+
     private:
       void extract_fic_codewords();
 

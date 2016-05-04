@@ -140,5 +140,24 @@ namespace dabdecode
       }
     }
 
+  std::size_t msc_cifs(transmission_mode const mode) noexcept
+    {
+    switch(mode)
+      {
+      case transmission_mode::mode_1:
+        return mode_1::frame_cifs::value;
+        break;
+      case transmission_mode::mode_2:
+        return mode_2::frame_cifs::value;
+        break;
+      case transmission_mode::mode_3:
+        return mode_3::frame_cifs::value;
+        break;
+      case transmission_mode::mode_4:
+        return mode_4::frame_cifs::value;
+        break;
+      }
+    }
+
   }
 

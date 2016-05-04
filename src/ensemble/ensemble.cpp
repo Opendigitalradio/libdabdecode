@@ -1,5 +1,7 @@
+#include "constants/common.h"
 #include "ensemble/ensemble.h"
 #include "ensemble/service.h"
+#include "frame/cif.h"
 #include "frame/fib.h"
 #include "mode/modes.h"
 
@@ -89,6 +91,38 @@ namespace dabdecode
       {
       auto const & fic = m_frame->fic();
       m_ficParser.parse(fic);
+
+      if(m_activeService)
+        {
+        auto const primaryComponent = m_activeService->primary();
+        subchannel * selected = nullptr;
+
+        for(auto & component : m_components)
+          {
+          if(component.id() == primaryComponent)
+            {
+            auto const subchannel = component.subchannel();
+            auto realSubchannel = m_subchannels.find(dabdecode::subchannel(subchannel, 0, 0, 0, false, 0));
+
+            if(realSubchannel != m_subchannels.cend())
+              {
+              selected = const_cast<struct subchannel *>(&*realSubchannel);
+              break;
+              }
+            }
+          }
+
+        if(selected)
+          {
+          auto const start = selected->start();
+          auto const end = start + selected->size();
+
+          for(auto const & cif : m_frame->msc())
+            {
+            selected->process(cif.begin() + start * kCuBits, cif.end() + end * kCuBits);
+            }
+          }
+        }
       }
     else
       {
