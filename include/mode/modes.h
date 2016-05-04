@@ -19,7 +19,7 @@
  *
  * In addition to the instantiations of dabdecode::basic_mode, this file also declares some
  * convenience functions to get transform the user supplied values of
- * dabdecode::transport_mode.
+ * dabdecode::transmission_mode
  */
 
 namespace dabdecode
@@ -29,6 +29,7 @@ namespace dabdecode
     {
 
     /**
+     * @internal
      * @ingroup dab_modes
      * @brief DAB transport mode 1 descriptor
      *
@@ -38,6 +39,7 @@ namespace dabdecode
     using mode_1 = basic_mode<1536,  76, 3, 12, 4>;
 
     /**
+     * @internal
      * @ingroup dab_modes
      * @brief DAB transport mode 2 descriptor
      *
@@ -47,6 +49,7 @@ namespace dabdecode
     using mode_2 = basic_mode< 384,  76, 3,  3, 1>;
 
     /**
+     * @internal
      * @ingroup dab_modes
      * @brief DAB transport mode 3 descriptor
      *
@@ -56,6 +59,7 @@ namespace dabdecode
     using mode_3 = basic_mode< 192, 153, 8,  4, 1>;
 
     /**
+     * @internal
      * @ingroup dab_modes
      * @brief DAB transport mode 4 descriptor
      *

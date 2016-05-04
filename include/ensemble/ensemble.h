@@ -120,7 +120,7 @@ namespace dabdecode
        * @brief Extract the next frame
        *
        * This function is used to extract the next frame from the input data stream.
-       * It assembles the whole frame and stores it in #m_frame.
+       * It assembles the whole frame and stores it in m_frame.
        *
        * @return true if extraction was successful, false otherwise
        */
