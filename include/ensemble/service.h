@@ -1,7 +1,7 @@
 #ifndef __DABDECODE_ENSEMBLE__SERVICE
 #define __DABDECODE_ENSEMBLE__SERVICE
 
-#include "constants/service_types"
+#include "constants/service_types.h"
 #include "ensemble/service_component.h"
 
 #include <boost/operators.hpp>
