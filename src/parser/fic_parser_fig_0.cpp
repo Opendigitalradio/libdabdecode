@@ -29,6 +29,9 @@ namespace dabdecode
         case 2:
           fig_0_ext_2(base + 1, end, isData);
           break;
+        case 3:
+          fig_0_ext_3(base + 1, end);
+          break;
         default:
           break;
         }
@@ -96,14 +99,54 @@ namespace dabdecode
       for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
         {
         auto const transportMechanism = constants::transport_mechanism(*++pos >> 6);
+        auto component = service_component{std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
+                 transportMechanism, bool(*(pos + 1) >> 1 & 1), bool(*(pos + 1) & 1)};
 
-        srv.add({std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
-                 transportMechanism, bool(*(pos + 1) >> 1 & 1), bool(*(pos + 1) & 1)});
+        srv.add(component);
+        m_target.add(std::move(component));
         pos += 1;
         }
 
       m_target.add(std::move(srv));
       }
+    }
+
+  void fic_parser::fig_0_ext_3(fic_parser::iterator const & base, fic_parser::iterator const & end)
+    {
+    for(auto pos = base; pos != end;)
+      {
+      auto const componentId = std::uint16_t(*pos << 8 | *(pos + 1) >> 4);
+      ++pos;
+
+      auto const hasCaOrg = bool(*pos & 1);
+      ++pos;
+
+      auto const componentType = std::uint8_t(*pos & 63);
+      ++pos;
+
+      auto const subchannelId = std::uint8_t(*pos >> 2);
+      ++pos;
+
+      if(hasCaOrg)
+        {
+        pos += 2;
+        }
+      else
+        {
+        ++pos;
+        }
+
+      for(auto & component : m_target.m_components)
+        {
+        if(component.id() == componentId)
+          {
+          const_cast<service_component &>(component).subchannel(subchannelId);
+          const_cast<service_component &>(component).type(componentType);
+          }
+        }
+
+      }
+
     }
 
   }

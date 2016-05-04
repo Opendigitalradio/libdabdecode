@@ -31,8 +31,10 @@ namespace dabdecode
     std::uint32_t id() const;
 
     private:
-      void add(service_component && component);
+      void add(service_component const & component);
+
       void label(std::string && label);
+
       void type(constants::service_type const type);
 
       std::uint32_t const m_id;
@@ -41,7 +43,7 @@ namespace dabdecode
       std::string m_label{};
       constants::service_type m_type{constants::service_type::programme};
 
-      std::set<service_component> m_components{};
+      std::set<std::uint16_t> m_components{};
 
       friend struct fic_parser;
     };

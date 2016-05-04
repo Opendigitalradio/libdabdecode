@@ -3,6 +3,7 @@
 
 #include "ensemble/subchannel.h"
 #include "ensemble/service.h"
+#include "ensemble/service_component.h"
 #include "frame/frame.h"
 #include "mode/transport_mode.h"
 #include "parser/fic_parser.h"
@@ -153,6 +154,13 @@ namespace dabdecode
        */
       void add(service && service);
 
+      /**
+       * @internal
+       *
+       * @brief Add a service component to the ensemble
+       */
+      void add(service_component && component);
+
       std::istream & m_sync;
       std::istream & m_data;
       transport_mode const m_mode;
@@ -161,6 +169,7 @@ namespace dabdecode
       std::unique_ptr<frame> m_frame{};
       std::set<subchannel> m_subchannels{};
       std::set<service> m_services{};
+      std::set<service_component> m_components{};
       std::string m_label{};
       std::uint16_t m_id{};
 

@@ -9,6 +9,8 @@
 namespace dabdecode
   {
 
+  struct fic_parser;
+
   namespace constants
     {
 
@@ -97,6 +99,13 @@ namespace dabdecode
     /**
      * @internal
      *
+     * @brief Get the transported type
+     */
+    std::uint8_t type() const;
+
+    /**
+     * @internal
+     *
      * @brief Check if a SC is "less than" another SC.
      *
      * This check only checks whether the id of the current SC is less than the one of
@@ -120,12 +129,29 @@ namespace dabdecode
     bool operator==(service_component const & other) const;
 
     private:
+      /**
+       * @internal
+       *
+       * @brief Set the associated subchannel id
+       */
+      void subchannel(std::uint8_t const id);
+
+      /**
+       * @internal
+       *
+       * @brief Set the transported type
+       */
+      void type(std::uint8_t const type);
+
       std::uint16_t const m_id;
       constants::transport_mechanism const m_transport;
       bool const m_isPrimary;
       bool const m_caApplies;
 
       std::uint8_t m_subchannelId{std::numeric_limits<std::uint8_t>::max()};
+      std::uint8_t m_type{};
+
+      friend fic_parser;
     };
 
   }

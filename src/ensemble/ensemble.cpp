@@ -62,6 +62,11 @@ namespace dabdecode
     m_services.insert(std::move(service));
     }
 
+  void ensemble::add(service_component && component)
+    {
+    m_components.insert(std::move(component));
+    }
+
   void ensemble::activate(service const & service)
     {
     auto const pos = m_services.find(service);

@@ -13,6 +13,7 @@ namespace dabdecode
     if(transport == constants::transport_mechanism::stream_audio || transport == constants::transport_mechanism::package_data)
       {
       m_subchannelId = id & 63;
+      m_type = (id >> 6) & 63;
       }
     }
 
@@ -41,6 +42,11 @@ namespace dabdecode
     return m_subchannelId;
     }
 
+  std::uint8_t service_component::type() const
+    {
+    return m_type;
+    }
+
   bool service_component::operator<(service_component const & other) const
     {
     return m_id < other.m_id;
@@ -49,6 +55,16 @@ namespace dabdecode
   bool service_component::operator==(service_component const & other) const
     {
     return m_id == other.m_id;
+    }
+
+  void service_component::subchannel(std::uint8_t const id)
+    {
+    m_subchannelId = id;
+    }
+
+  void service_component::type(std::uint8_t const type)
+    {
+    m_type = type;
     }
 
   }

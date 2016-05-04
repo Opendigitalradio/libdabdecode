@@ -26,9 +26,9 @@ namespace dabdecode
     return m_id;
     }
 
-  void service::add(service_component && component)
+  void service::add(service_component const & component)
     {
-    m_components.insert(std::move(component));
+    m_components.insert(component.id());
     }
 
   void service::label(std::string && label)
