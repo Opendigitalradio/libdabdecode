@@ -20,7 +20,7 @@ int main()
     return 1;
     }
 
-  auto ensemble = dabdecode::ensemble{syncStream, dataStream};
+  auto ensemble = dabdecode::ensemble{syncStream, dataStream, dabdecode::constants::transmission_mode::mode_1};
 
   while(syncStream && dataStream)
     {

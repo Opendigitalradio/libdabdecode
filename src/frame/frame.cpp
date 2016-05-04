@@ -11,10 +11,12 @@
 namespace dabdecode
   {
 
+  using namespace constants;
+
   namespace
     {
 
-    std::vector<float> depuncture_fic_codeword(std::vector<float> && codeword, transport_mode const mode)
+    std::vector<float> depuncture_fic_codeword(std::vector<float> && codeword, transmission_mode const mode)
       {
       using namespace constants;
 
@@ -22,7 +24,7 @@ namespace dabdecode
       auto inputIndex = std::size_t{};
       auto outputIndex = std::size_t{};
 
-      auto const nofFirstBlocks = mode == transport_mode::mode_3 ? 29 : 21;
+      auto const nofFirstBlocks = mode == transmission_mode::mode_3 ? 29 : 21;
       auto const nofSecondBlocks = 3;
       auto const nofTailBits = 24;
 
@@ -56,7 +58,7 @@ namespace dabdecode
       return depunctured;
       }
 
-    void descramble_fic_codeword(std::vector<uint8_t> & scrambled, transport_mode const mode)
+    void descramble_fic_codeword(std::vector<uint8_t> & scrambled, transmission_mode const mode)
       {
       auto scramblerRegister = std::array<uint8_t, 9>{{1, 1, 1, 1, 1, 1, 1, 1, 1}};
       auto const ficCodewordSize = fic_codeword_size(mode);
@@ -96,7 +98,7 @@ namespace dabdecode
 
     }
 
-  frame::frame(std::vector<float> && data, transport_mode const mode)
+  frame::frame(std::vector<float> && data, transmission_mode const mode)
     : m_data{std::move(data)},
       m_mode{mode}
     {

@@ -9,7 +9,9 @@
 namespace dabdecode
   {
 
-  ensemble::ensemble(std::istream & sync, std::istream & data, transport_mode const mode)
+  using namespace constants;
+
+  ensemble::ensemble(std::istream & sync, std::istream & data, transmission_mode const mode)
     : m_sync{sync},
       m_data{data},
       m_mode{mode}

@@ -5,7 +5,7 @@
 #include "ensemble/service.h"
 #include "ensemble/service_component.h"
 #include "frame/frame.h"
-#include "mode/transport_mode.h"
+#include "constants/transmission_mode.h"
 #include "parser/fic_parser.h"
 
 #include <cstdint>
@@ -39,7 +39,7 @@ namespace dabdecode
      * @param data The OFDM symbol data stream
      * @param mode The transmission mode used for the ensemble
      */
-    ensemble(std::istream & sync, std::istream & data, transport_mode const mode = transport_mode::mode_1);
+    ensemble(std::istream & sync, std::istream & data, constants::transmission_mode const mode = constants::transmission_mode::mode_1);
 
     /**
      * @brief Retrieve the label of the ensemble
@@ -163,7 +163,7 @@ namespace dabdecode
 
       std::istream & m_sync;
       std::istream & m_data;
-      transport_mode const m_mode;
+      constants::transmission_mode const m_mode;
 
       fic_parser m_ficParser{*this};
       std::unique_ptr<frame> m_frame{};

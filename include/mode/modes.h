@@ -1,8 +1,8 @@
 #ifndef __DABDECODE_MODE__MODES
 #define __DABDECODE_MODE__MODES
 
+#include "constants/transmission_mode.h"
 #include "mode/basic_mode.h"
-#include "mode/transport_mode.h"
 
 /**
  * @internal
@@ -66,19 +66,19 @@ namespace dabdecode
 
     }
 
-  std::size_t frame_size(transport_mode const mode) noexcept;
+  std::size_t frame_size(constants::transmission_mode const mode) noexcept;
 
-  std::size_t fic_size(transport_mode const mode) noexcept;
+  std::size_t fic_size(constants::transmission_mode const mode) noexcept;
 
-  std::size_t punctured_codeword_size(transport_mode const mode) noexcept;
+  std::size_t punctured_codeword_size(constants::transmission_mode const mode) noexcept;
 
-  std::size_t fic_codeword_size(transport_mode const mode) noexcept;
+  std::size_t fic_codeword_size(constants::transmission_mode const mode) noexcept;
 
-  std::size_t fibs_in_codeword(transport_mode const mode) noexcept;
+  std::size_t fibs_in_codeword(constants::transmission_mode const mode) noexcept;
 
-  std::size_t frame_symbols(transport_mode const mode) noexcept;
+  std::size_t frame_symbols(constants::transmission_mode const mode) noexcept;
 
-  std::size_t symbol_size(transport_mode const mode) noexcept;
+  std::size_t symbol_size(constants::transmission_mode const mode) noexcept;
 
   }
 
