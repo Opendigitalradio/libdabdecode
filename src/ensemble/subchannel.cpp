@@ -1,8 +1,12 @@
 #include "ensemble/subchannel.h"
 #include "constants/common.h"
 
+#include <iostream>
+
 namespace dabdecode
   {
+
+  using namespace constants;
 
   subchannel::subchannel(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
                          std::uint16_t const bitrate, bool const isEep, std::uint16_t const eepProtectionLevel)
@@ -70,8 +74,8 @@ namespace dabdecode
 
   void subchannel::process(std::vector<float>::const_iterator samplesStart, std::vector<float>::const_iterator samplesEnd)
     {
-    (void)samplesStart;
-    (void)samplesEnd;
+    auto const fragmentSize = std::distance(samplesStart, samplesEnd);
+    (void)fragmentSize;
     }
 
   }
