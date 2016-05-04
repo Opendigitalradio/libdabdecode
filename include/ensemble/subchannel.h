@@ -1,6 +1,10 @@
 #ifndef __DABDECODE_ENSEMBLE__SUBCHANNEL
 #define __DABDECODE_ENSEMBLE__SUBCHANNEL
 
+#include "constants/convolution_encoder_attributes.h"
+#include "constants/transmission_mode.h"
+#include "viterbi/fsm.h"
+
 #include <boost/operators.hpp>
 
 #include <cstdint>
@@ -147,7 +151,11 @@ namespace dabdecode
       std::uint8_t const m_eepProtectionTable;
 
       std::vector<float> m_deinterleavedData;
-      std::vector<std::uint8_t> m_data;
+      std::vector<std::uint8_t> m_data{};
+
+      std::uint8_t m_processedFragments{};
+
+      fsm const m_fsm{1, 4, {constants::kEncoderPolynomials.cbegin(), constants::kEncoderPolynomials.cend()}};
 
       friend ensemble;
     };
