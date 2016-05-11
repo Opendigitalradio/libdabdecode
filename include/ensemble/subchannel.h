@@ -142,6 +142,13 @@ namespace dabdecode
        */
       void process(std::vector<float>::const_iterator samplesStart, std::vector<float>::const_iterator samplesEnd);
 
+      /**
+       * @internal
+       *
+       * @brief Process EEP protected data
+       */
+      void process_eep();
+
       std::uint16_t const m_id;
       std::uint16_t const m_start;
       std::uint16_t const m_size;

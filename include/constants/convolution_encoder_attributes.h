@@ -58,6 +58,27 @@ namespace dabdecode
 
     /**
      * @internal
+     *
+     * @brief The constraint length as defined in ETSI EN 300 401 Section 11.1.1
+     *
+     * The constraint length of the convolutional encoder specifies how many states the encoder has got.
+     * This is specifically interesting since the standard requires the encoder to be emptied by shifting
+     * in 0s.
+     */
+    constexpr int kEncoderConstraintLength{7};
+
+    /**
+     * @internal
+     *
+     * @brief The amount of memory the encoder posesses
+     *
+     * This constant represents the number of memory cells of the encoder. This constant is interesting, since
+     * the number of tailbits of a codeword is a function of the number of memory cells.
+     */
+    constexpr int kEncoderMemorySize{kEncoderConstraintLength - 1};
+
+    /**
+     * @internal
      * @brief Normalized 4-bit parity lookup table
      *
      * The lookup table for expected symbols for the convolution decoder. Since we use softbits,

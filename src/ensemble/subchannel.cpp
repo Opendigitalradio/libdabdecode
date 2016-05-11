@@ -16,7 +16,7 @@ namespace dabdecode
 
   namespace
     {
-    std::size_t first_block_count(subchannel const & subchannel)
+    std::size_t eep_first_block_count(subchannel const & subchannel)
       {
       auto count = std::size_t{};
 
@@ -57,7 +57,7 @@ namespace dabdecode
       return count;
       }
 
-    std::size_t second_block_count(subchannel const & subchannel)
+    std::size_t eep_second_block_count(subchannel const & subchannel)
       {
       auto count = std::size_t{};
 
@@ -95,6 +95,109 @@ namespace dabdecode
 
       return count;
       }
+
+    std::size_t eep_first_puncturing_vector_idx(subchannel const & subchannel)
+      {
+      std::size_t idx{};
+
+      if(!subchannel.eepProtectionTable())
+        {
+        switch(subchannel.eepProtectionLevel())
+          {
+          case 0:
+            idx = 24;
+            break;
+          case 1:
+            if(subchannel.bitrate() == 8)
+              {
+              idx = 13;
+              }
+            else
+              {
+              idx = 14;
+              }
+            break;
+          case 2:
+            idx = 8;
+            break;
+          case 3:
+            idx = 3;
+            break;
+          }
+        }
+      else
+        {
+        switch(subchannel.eepProtectionLevel())
+          {
+          case 0:
+            idx = 10;
+            break;
+          case 1:
+            idx = 6;
+            break;
+          case 2:
+            idx = 4;
+            break;
+          case 3:
+            idx = 2;
+            break;
+          }
+        }
+
+      return idx - 1;
+      }
+
+    std::size_t eep_second_puncturing_vector_idx(subchannel const & subchannel)
+      {
+      std::size_t idx{};
+
+      if(!subchannel.eepProtectionTable())
+        {
+        switch(subchannel.eepProtectionLevel())
+          {
+          case 0:
+            idx = 23;
+            break;
+          case 1:
+            if(subchannel.bitrate() == 8)
+              {
+              idx = 12;
+              }
+            else
+              {
+              idx = 13;
+              }
+            break;
+          case 2:
+            idx = 7;
+            break;
+          case 3:
+            idx = 2;
+            break;
+          }
+        }
+      else
+        {
+        switch(subchannel.eepProtectionLevel())
+          {
+          case 0:
+            idx = 9;
+            break;
+          case 1:
+            idx = 5;
+            break;
+          case 2:
+            idx = 3;
+            break;
+          case 3:
+            idx = 1;
+            break;
+          }
+        }
+
+      return idx - 1;
+      }
+
     }
 
   subchannel::subchannel(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
@@ -171,23 +274,31 @@ namespace dabdecode
       m_deinterleavedData[block * 16 + fragmentBit] = *(samplesStart + block * 16 + fragmentBit);
       }
 
-    if(++m_processedFragments < 16)
+    if(++m_processedFragments % 16)
       {
       return;
       }
-    else
+
+    if(m_isEep)
       {
-      m_processedFragments = 0;
+      process_eep();
       }
 
+    }
+
+  void subchannel::process_eep()
+    {
     std::vector<float> depunctured{};
     int idx{};
 
-    for(std::size_t block = 0; block < first_block_count(*this); ++block)
+    auto const firstPvIdx = eep_first_puncturing_vector_idx(*this);
+    auto const secondPvIdx = eep_second_puncturing_vector_idx(*this);
+
+    for(std::size_t block = 0; block < eep_first_block_count(*this); ++block)
       {
       for(int bit = 0; bit < 128; ++bit)
         {
-        if(kPuncturingVectors[23][bit % 32])
+        if(kPuncturingVectors[firstPvIdx][bit % 32])
           {
           depunctured.push_back(m_deinterleavedData[idx++]);
           }
@@ -198,11 +309,11 @@ namespace dabdecode
         }
       }
 
-    for(std::size_t block = 0; block < second_block_count(*this); ++block)
+    for(std::size_t block = 0; block < eep_second_block_count(*this); ++block)
       {
       for(int bit = 0; bit < 128; ++bit)
         {
-        if(kPuncturingVectors[22][bit % 32])
+        if(kPuncturingVectors[secondPvIdx][bit % 32])
           {
           depunctured.push_back(m_deinterleavedData[idx++]);
           }
@@ -225,25 +336,29 @@ namespace dabdecode
         }
       }
 
-    auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[768 + 6]);
-      viterbi_algorithm_combined(m_fsm.I(),
-                                 m_fsm.S(),
-                                 m_fsm.O(),
-                                 m_fsm.OS(),
-                                 m_fsm.PS(),
-                                 m_fsm.PI(),
-                                 768 + 6,
-                                 0,
-                                 0,
-                                 4,
-                                 {kDecoderLookupTable.cbegin(), kDecoderLookupTable.cend()},
-                                 depunctured.data(),
-                                 deconvolved.get());
+    auto const deconvolvedLength = depunctured.size() - kEncoderInputLength * kEncoderMemorySize;
+    auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[deconvolvedLength + kEncoderMemorySize]);
+
+    viterbi_algorithm_combined(m_fsm.I(),
+                               m_fsm.S(),
+                               m_fsm.O(),
+                               m_fsm.OS(),
+                               m_fsm.PS(),
+                               m_fsm.PI(),
+                               deconvolvedLength + kEncoderMemorySize,
+                               0,
+                               0,
+                               kEncoderOutputLength,
+                               {kDecoderLookupTable.cbegin(), kDecoderLookupTable.cend()},
+                               depunctured.data(),
+                               deconvolved.get());
 
     auto scramblerRegister = std::array<uint8_t, 9>{{1, 1, 1, 1, 1, 1, 1, 1, 1}};
     auto temporary = uint8_t{};
 
-    for(std::size_t idx{}; idx < 768; ++idx)
+    m_data.resize(deconvolvedLength / 8);
+
+    for(std::size_t idx{}; idx < deconvolvedLength; ++idx)
       {
       temporary = scramblerRegister[8] ^ scramblerRegister[4];
 
@@ -257,16 +372,16 @@ namespace dabdecode
       deconvolved[idx] ^= temporary;
       }
 
-    for(int i = 0; i < 768 / 8; ++i)
+    for(std::size_t byteIndex{}; byteIndex < deconvolvedLength / 8; ++byteIndex)
       {
       auto byte = uint8_t{};
 
       for(int bit = 0; bit < 8; ++bit)
         {
-        byte |= (deconvolved.get())[8 * i + bit] << (7 - bit);
+        byte |= (deconvolved.get())[8 * byteIndex + bit] << (7 - bit);
         }
 
-      m_data.push_back(byte);
+      m_data[byteIndex] = byte;
       }
     }
 
