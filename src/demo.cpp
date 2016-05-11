@@ -22,12 +22,10 @@ int main()
 
   auto ensemble = dabdecode::ensemble{syncStream, dataStream, dabdecode::constants::transmission_mode::mode_1};
 
-  while(syncStream && dataStream)
+  while(ensemble.update())
     {
     if(ensemble)
       {
-      std::cout << "Ensemble \"" << ensemble.label() << "\" @ " << ensemble.id() << '\n';
-
       for(auto const & service : ensemble.services())
         {
         if(service.type() == dabdecode::constants::service_type::data)
@@ -35,9 +33,19 @@ int main()
           ensemble.activate(service);
           }
         }
-      }
 
-    ensemble.update();
+      auto const data = ensemble.active_data();
+
+      if(data.first == dabdecode::constants::transport_mechanism::package_data)
+        {
+        for(auto const & elem : data.second)
+          {
+          std::cout << elem;
+          }
+
+        std::cout << std::flush;
+        }
+      }
     }
 
   }

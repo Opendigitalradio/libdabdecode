@@ -5,6 +5,7 @@
 #include "frame/fib.h"
 #include "mode/modes.h"
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -18,7 +19,6 @@ namespace dabdecode
       m_data{data},
       m_mode{mode}
     {
-    update();
     }
 
   std::string const & ensemble::label() const
@@ -85,7 +85,7 @@ namespace dabdecode
       }
     }
 
-  void ensemble::update()
+  bool ensemble::update()
     {
     if(next_frame())
       {
@@ -123,17 +123,50 @@ namespace dabdecode
             }
           }
         }
+
+      return true;
       }
     else
       {
       m_id = 0;
       m_label = "";
+      return false;
       }
     }
 
   ensemble::operator bool() const
     {
     return m_label.size() && m_id;
+    }
+
+  std::pair<constants::transport_mechanism, std::vector<std::uint8_t>> ensemble::active_data()
+    {
+    std::vector<std::uint8_t> data{};
+
+    if(!m_activeService)
+      {
+      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      }
+
+    auto const serviceComponent = std::find_if(m_components.cbegin(), m_components.cend(), [&](service_component const & comp){
+      return comp.id() == m_activeService->primary();
+      });
+
+    if(serviceComponent == m_components.cend())
+      {
+      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      }
+
+    auto const subchannel = std::find_if(m_subchannels.cbegin(), m_subchannels.cend(), [&](struct subchannel const & sub){
+      return sub.id() == serviceComponent->subchannel();
+      });
+
+    if(subchannel == m_subchannels.cend())
+      {
+      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      }
+
+    return std::make_pair(serviceComponent->transport(), subchannel->data());
     }
 
   bool ensemble::next_frame()

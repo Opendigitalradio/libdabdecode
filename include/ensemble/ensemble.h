@@ -92,7 +92,7 @@ namespace dabdecode
      * This function updates an ensemble from the datastream supplied during
      * construction. This includes updating the currently active service.
      */
-    void update();
+    bool update();
 
     /**
      * @brief Activate a service for decoding
@@ -112,6 +112,13 @@ namespace dabdecode
      * may be accessed safely.
      */
     explicit operator bool() const;
+
+    /**
+     * @brief Retrieve the currently active service's data
+     *
+     * This function returns the data that is transported in the currently active service.
+     */
+    std::pair<constants::transport_mechanism, std::vector<std::uint8_t>> active_data();
 
     private:
       /**
