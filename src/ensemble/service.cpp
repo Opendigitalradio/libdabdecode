@@ -14,6 +14,11 @@ namespace dab
     return m_type;
     }
 
+  std::string const & service::label() const
+    {
+    return m_label;
+    }
+
   std::shared_ptr<service_component> service::primary() const
     {
     return m_primaryComponent;

@@ -63,6 +63,11 @@ namespace dab
     service_type type() const;
 
     /**
+     * @brief Retrieve the service label
+     */
+    std::string const & label() const;
+
+    /**
      * @brief Retrieve the primary service component of a service
      */
     std::shared_ptr<service_component> primary() const;

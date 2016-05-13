@@ -30,6 +30,7 @@ namespace dab
 
         void fig_1(iterator const & base);
         void fig_1_ext_0(iterator const & base);
+        void fig_1_ext_5(iterator const & base);
 
         ensemble & m_target;
       };
