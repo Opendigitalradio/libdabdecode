@@ -338,7 +338,7 @@ namespace dab
           }
         }
 
-      auto const deconvolvedLength = depunctured.size() - constants::kEncoderInputLength * constants::kEncoderMemorySize;
+      auto const deconvolvedLength = (depunctured.size() - constants::kEncoderOutputLength * constants::kEncoderMemorySize) / constants::kEncoderOutputLength;
       auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[deconvolvedLength + constants::kEncoderMemorySize]);
 
       viterbi_algorithm_combined(m_fsm.I(),
