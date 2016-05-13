@@ -1,5 +1,6 @@
 arm-debug:
   script:
+    - git submodule update --init common
     - cd build
     - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Debug
     - make -j$(nproc)
@@ -11,6 +12,7 @@ arm-debug:
 
 arm-release:
   script:
+    - git submodule update --init common
     - cd build
     - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Release
     - make -j$(nproc)
@@ -24,6 +26,7 @@ arm-release:
 
 x86_64-debug:
   script:
+    - git submodule update --init common
     - cd build
     - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Debug
     - make -j$(nproc)
@@ -35,6 +38,7 @@ x86_64-debug:
 
 x86_64-release:
   script:
+    - git submodule update --init common
     - cd build
     - CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Release
     - make -j$(nproc)
@@ -48,6 +52,7 @@ x86_64-release:
 
 doc-internal:
   script:
+    - git submodule update --init common
     - cd build
     - cmake .. -DBUILD_DOCUMENTATION_ONLY=ON -DBUILD_INTERNAL_DOCUMENTATION=ON
     - make
@@ -62,6 +67,7 @@ doc-internal:
 
 doc-public:
   script:
+    - git submodule update --init common
     - cd build
     - cmake .. -DBUILD_DOCUMENTATION_ONLY=ON -DBUILD_INTERNAL_DOCUMENTATION=OFF
     - make
