@@ -1,16 +1,16 @@
 #include "ensemble/service_component.h"
 
-namespace dabdecode
+namespace dab
   {
 
-  service_component::service_component(std::uint16_t const id, constants::transport_mechanism const transport,
+  service_component::service_component(std::uint16_t const id, transport_mechanism const transport,
                                        bool const isPrimary, bool const caApplies)
     : m_id{id},
       m_transport{transport},
       m_isPrimary{isPrimary},
       m_caApplies{caApplies}
     {
-    if(transport == constants::transport_mechanism::stream_audio || transport == constants::transport_mechanism::package_data)
+    if(transport == transport_mechanism::stream_audio || transport == transport_mechanism::package_data)
       {
       m_subchannelId = id & 63;
       m_type = (id >> 6) & 63;
@@ -22,7 +22,7 @@ namespace dabdecode
     return m_id;
     }
 
-  constants::transport_mechanism service_component::transport() const
+  transport_mechanism service_component::transport() const
     {
     return m_transport;
     }

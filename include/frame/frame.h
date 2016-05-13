@@ -1,36 +1,39 @@
-#ifndef __DABDECODE__FRAME
-#define __DABDECODE__FRAME
+#ifndef __DAB__FRAME
+#define __DAB__FRAME
+
+#include "constants/convolution_encoder_attributes.h"
+#include "viterbi/fsm.h"
+
+#include <types/transmission_mode.h>
 
 #include <cstdint>
 #include <vector>
 
-#include "constants/convolution_encoder_attributes.h"
-#include "viterbi/fsm.h"
-#include "constants/transmission_mode.h"
-
-namespace dabdecode
+namespace dab
   {
 
-  struct frame
+  namespace __internal_dabdecode
     {
-    frame(std::vector<float> && data, constants::transmission_mode const mode);
 
-    std::vector<struct fib> fic();
+    struct frame
+      {
+      frame(std::vector<float> && data, transmission_mode const mode);
 
-    std::vector<struct cif> msc() const;
+      std::vector<struct fib> fic();
 
-    private:
-      void extract_fic_codewords();
+      std::vector<struct cif> msc() const;
 
-      fsm const m_fsm{constants::kEncoderInputLength,
-                      constants::kEncoderOutputLength,
-                      {constants::kEncoderPolynomials.cbegin(), constants::kEncoderPolynomials.cend()}};
+      private:
+        void extract_fic_codewords();
 
-      std::vector<float> const m_data;
-      constants::transmission_mode const m_mode;
+        std::vector<float> const m_data;
+        transmission_mode const m_mode;
+        fsm const m_fsm;
 
-      std::vector<std::vector<uint8_t>> m_ficCodewords{};
-    };
+        std::vector<std::vector<uint8_t>> m_ficCodewords{};
+      };
+
+    }
 
   }
 

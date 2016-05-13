@@ -20,28 +20,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DABDECODE_VITERBI__CORE_ALGORITHMS
-#define __DABDECODE_VITERBI__CORE_ALGORITHMS
+#ifndef __DAB_VITERBI__CORE_ALGORITHMS
+#define __DAB_VITERBI__CORE_ALGORITHMS
 
 #include <cstdint>
 #include <vector>
 
-namespace dabdecode
+namespace dab
   {
 
-  void viterbi_algorithm_combined(int I,
-                                  int S,
-                                  int O,
-                                  const std::vector<int> &OS,
-                                  const std::vector< std::vector<int> > &PS,
-                                  const std::vector< std::vector<int> > &PI,
-                                  int K,
-                                  int S0,
-                                  int SK,
-                                  int D,
-                                  const std::vector<float> &TABLE,
-                                  const float *in,
-                                  uint8_t *out);
+  namespace __internal_dabdecode
+    {
+
+    void viterbi_algorithm_combined(int I,
+                                    int S,
+                                    int O,
+                                    const std::vector<int> &OS,
+                                    const std::vector< std::vector<int> > &PS,
+                                    const std::vector< std::vector<int> > &PI,
+                                    int K,
+                                    int S0,
+                                    int SK,
+                                    int D,
+                                    const float *in,
+                                    uint8_t *out);
+    }
 
   }
 

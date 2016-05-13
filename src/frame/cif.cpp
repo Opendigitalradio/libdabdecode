@@ -1,14 +1,17 @@
 #include "frame/cif.h"
 
-namespace dabdecode
+namespace dab
   {
 
-  cif::cif(cif::iterator const & begin, cif::iterator const & end)
-    : m_begin{begin},
-      m_end{end}
+  namespace __internal_dabdecode
     {
 
-    }
+    cif::cif(cif::iterator const & begin, cif::iterator const & end)
+      : m_begin{begin},
+        m_end{end}
+      {
+
+      }
 
   cif::iterator cif::begin() const
     {
@@ -18,6 +21,8 @@ namespace dabdecode
   cif::iterator cif::end() const
     {
     return m_end;
+    }
+
     }
 
   }

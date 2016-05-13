@@ -20,23 +20,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "constants/convolution_encoder_attributes.h"
 #include "viterbi/calc_metric.h"
 
-namespace dabdecode
+namespace dab
   {
 
-  void calc_metric(int O, int D, const std::vector<float> &TABLE, const float *input, float *metric)
+  namespace __internal_dabdecode
     {
-    for(int o = 0; o < O; o++)
-      {
-      metric[o] = 0.0;
 
-      for(int m = 0; m < D; m++)
+    void calc_metric(int O, int D, const float *input, float *metric)
+      {
+      for(int o = 0; o < O; o++)
         {
-        float s = input[m]-TABLE[o*D+m];
-        metric[o] += s * s;
+        metric[o] = 0.0;
+
+        for(int m = 0; m < D; m++)
+          {
+          float s = input[m]-constants::kDecoderLookupTable[o*D+m];
+          metric[o] += s * s;
+          }
         }
       }
+
     }
 
   }

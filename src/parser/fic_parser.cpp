@@ -1,43 +1,48 @@
 #include "ensemble/ensemble.h"
 #include "parser/fic_parser.h"
 
-namespace dabdecode
+namespace dab
   {
 
-  fic_parser::fic_parser(ensemble & target)
-    : m_target{target}
+  namespace __internal_dabdecode
     {
 
-    }
-
-  void fic_parser::parse(std::vector<fib> const & fic)
-    {
-    for(auto const & fib : fic)
+    fic_parser::fic_parser(ensemble & target)
+      : m_target{target}
       {
-      auto fibBase = fib.begin();
-      auto fibEnd = fib.end();
 
-      while(fibBase != fibEnd && !(*fibBase == 255))
+      }
+
+    void fic_parser::parse(std::vector<fib> const & fic)
+      {
+      for(auto const & fib : fic)
         {
-        auto const figType = *fibBase >> 5;
-        auto const figSize = *fibBase & 31;
-        ++fibBase;
+        auto fibBase = fib.begin();
+        auto fibEnd = fib.end();
 
-        switch(figType)
+        while(fibBase != fibEnd && !(*fibBase == 255))
           {
-          case 0:
-            fig_0(fibBase, fibBase + figSize);
-            break;
-          case 1:
-            fig_1(fibBase);
-            break;
-          default:
-            break;
-          };
+          auto const figType = *fibBase >> 5;
+          auto const figSize = *fibBase & 31;
+          ++fibBase;
 
-        fibBase += figSize;
+          switch(figType)
+            {
+            case 0:
+              fig_0(fibBase, fibBase + figSize);
+              break;
+            case 1:
+              fig_1(fibBase);
+              break;
+            default:
+              break;
+            };
+
+          fibBase += figSize;
+          }
         }
       }
+
     }
 
   }

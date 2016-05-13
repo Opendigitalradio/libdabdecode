@@ -1,7 +1,7 @@
 #include "ensemble/service.h"
 #include "ensemble/service_component.h"
 
-namespace dabdecode
+namespace dab
   {
 
   bool service::operator<(service const & other) const
@@ -19,7 +19,7 @@ namespace dabdecode
     return m_id;
     }
 
-  constants::service_type service::type() const
+  service_type service::type() const
     {
     return m_type;
     }
@@ -41,7 +41,7 @@ namespace dabdecode
     m_label = std::move(label);
     }
 
-  void service::type(constants::service_type const type)
+  void service::type(service_type const type)
     {
     m_type = type;
     }

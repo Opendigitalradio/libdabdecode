@@ -36,6 +36,8 @@ flags = [
     '-I',
     scriptPath + '/include',
     '-isystem',
+    scriptPath + '/common/include',
+    '-isystem',
     scriptPath + '/third_party/cute',
     '-Wall',
     '-Wextra',

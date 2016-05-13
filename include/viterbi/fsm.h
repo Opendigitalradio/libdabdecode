@@ -20,42 +20,49 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DABDECODE_VITERBI__FSM
-#define __DABDECODE_VITERBI__FSM
+#ifndef __DAB_VITERBI__FSM
+#define __DAB_VITERBI__FSM
 
+#include <array>
 #include <vector>
 #include <iosfwd>
 
-namespace dabdecode
+namespace dab
   {
-  class fsm
+
+  namespace __internal_dabdecode
     {
-    int d_I;
-    int d_S;
-    int d_O;
-    std::vector<int> d_NS;
-    std::vector<int> d_OS;
-    std::vector< std::vector<int> > d_PS;
-    std::vector< std::vector<int> > d_PI;
-    std::vector<int> d_TMl;
-    std::vector<int> d_TMi;
-    void generate_PS_PI ();
-    void generate_TM ();
-    bool find_es(int es);
 
-    public:
-      fsm(int k, int n, const std::vector<int> &G);
+    class fsm
+      {
+      int d_I;
+      int d_S;
+      int d_O;
+      std::vector<int> d_NS;
+      std::vector<int> d_OS;
+      std::vector< std::vector<int> > d_PS;
+      std::vector< std::vector<int> > d_PI;
+      std::vector<int> d_TMl;
+      std::vector<int> d_TMi;
+      void generate_PS_PI ();
+      void generate_TM ();
+      bool find_es(int es);
 
-      int I() const { return d_I; }
-      int S() const { return d_S; }
-      int O() const { return d_O; }
-      const std::vector<int> & NS() const { return d_NS; }
-      const std::vector<int> & OS() const { return d_OS; }
-      const std::vector< std::vector<int> > & PS() const { return d_PS; }
-      const std::vector< std::vector<int> > & PI() const { return d_PI; }
-      const std::vector<int> & TMi() const { return d_TMi; }
-      const std::vector<int> & TMl() const { return d_TMl; }
-    };
+      public:
+        fsm(int k, int n, const std::array<int, 4> &G);
+
+        int I() const { return d_I; }
+        int S() const { return d_S; }
+        int O() const { return d_O; }
+        const std::vector<int> & NS() const { return d_NS; }
+        const std::vector<int> & OS() const { return d_OS; }
+        const std::vector< std::vector<int> > & PS() const { return d_PS; }
+        const std::vector< std::vector<int> > & PI() const { return d_PI; }
+        const std::vector<int> & TMi() const { return d_TMi; }
+        const std::vector<int> & TMl() const { return d_TMl; }
+      };
+
+    }
   }
 
 #endif

@@ -2,38 +2,43 @@
 
 #include <boost/crc.hpp>
 
-namespace dabdecode
+namespace dab
   {
 
-  fib::fib(fib::iterator const & begin, fib::iterator const & end)
-    : m_begin{begin},
-      m_end{end}
+  namespace __internal_dabdecode
     {
 
-    }
-
-  fib::operator bool() const
-    {
-    boost::crc_ccitt_type checker{};
-    auto it = m_begin;
-
-    while(it != m_end)
+    fib::fib(fib::iterator const & begin, fib::iterator const & end)
+      : m_begin{begin},
+        m_end{end}
       {
-      checker.process_byte(*it);
-      ++it;
+
       }
 
-    return !checker.checksum();
-    }
+    fib::operator bool() const
+      {
+      boost::crc_ccitt_type checker{};
+      auto it = m_begin;
 
-  fib::iterator fib::begin() const
-    {
-    return m_begin;
-    }
+      while(it != m_end)
+        {
+        checker.process_byte(*it);
+        ++it;
+        }
 
-  fib::iterator fib::end() const
-    {
-    return m_end - 2;
+      return !checker.checksum();
+      }
+
+    fib::iterator fib::begin() const
+      {
+      return m_begin;
+      }
+
+    fib::iterator fib::end() const
+      {
+      return m_end - 2;
+      }
+
     }
 
   }

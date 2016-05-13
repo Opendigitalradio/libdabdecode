@@ -1,7 +1,6 @@
-#ifndef __DABDECODE_ENSEMBLE__SERVICE
-#define __DABDECODE_ENSEMBLE__SERVICE
+#ifndef __DAB_ENSEMBLE__SERVICE
+#define __DAB_ENSEMBLE__SERVICE
 
-#include "constants/service_types.h"
 #include "ensemble/service_component.h"
 
 #include <boost/operators.hpp>
@@ -10,8 +9,29 @@
 #include <set>
 #include <string>
 
-namespace dabdecode
+namespace dab
   {
+
+  /**
+   * @brief The types of different services.
+   *
+   * This enum declares the two different types of service currently
+   * specified in DAB.
+   *
+   * @sa service::type
+   */
+  enum struct service_type : std::uint8_t
+    {
+    programme,
+    data
+    };
+
+  struct ensemble;
+
+  namespace __internal_dabdecode
+    {
+    struct fic_parser;
+    }
 
   /**
    * @brief Object of this type represent DAB services (like radio stations)
@@ -47,7 +67,7 @@ namespace dabdecode
      *
      * @see service_type
      */
-    constants::service_type type() const;
+    service_type type() const;
 
     private:
       service(std::uint32_t const id, bool const isLocal);
@@ -56,7 +76,7 @@ namespace dabdecode
 
       void label(std::string && label);
 
-      void type(constants::service_type const type);
+      void type(service_type const type);
 
       std::uint16_t primary() const;
 
@@ -66,13 +86,13 @@ namespace dabdecode
       bool const m_isLocal;
 
       std::string m_label{};
-      constants::service_type m_type{constants::service_type::programme};
+      service_type m_type{service_type::programme};
 
       std::uint16_t m_primaryComponent{};
       std::set<std::uint16_t> m_components{};
 
-      friend struct fic_parser;
-      friend struct ensemble;
+      friend __internal_dabdecode::fic_parser;
+      friend ensemble;
     };
 
   }

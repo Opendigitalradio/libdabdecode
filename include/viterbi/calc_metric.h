@@ -20,15 +20,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DABDECODE_VITERBI__CALC_METRIC
-#define __DABDECODE_VITERBI__CALC_METRIC
+#ifndef __DAB_VITERBI__CALC_METRIC
+#define __DAB_VITERBI__CALC_METRIC
 
-#include <vector>
+#include <array>
 
-namespace dabdecode
+namespace dab
   {
 
-  void calc_metric(int O, int D, const std::vector<float> &TABLE, const float *input, float *metric);
+  namespace __internal_dabdecode
+    {
+
+    void calc_metric(int O, int D, const float *input, float *metric);
+
+    }
 
   }
 

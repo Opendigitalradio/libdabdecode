@@ -1,40 +1,34 @@
-#ifndef __DABDECODE_ENSEMBLE__SERVICE_COMPONENT
-#define __DABDECODE_ENSEMBLE__SERVICE_COMPONENT
+#ifndef __DAB_ENSEMBLE__SERVICE_COMPONENT
+#define __DAB_ENSEMBLE__SERVICE_COMPONENT
 
 #include <boost/operators.hpp>
 
 #include <cstdint>
 #include <limits>
 
-namespace dabdecode
+namespace dab
   {
 
-  struct fic_parser;
-
-  namespace constants
+  namespace __internal_dabdecode
     {
-
-    /**
-     * @internal
-     *
-     * @brief Transport mechanism descriptors
-     *
-     * This enum defines the 4 possible transport mechanisms of a service component.
-     * Currently only transport_mechanism::package_data is supported.
-     */
-    enum struct transport_mechanism : std::uint8_t
-      {
-      stream_audio = 0,
-      stream_data = 1,
-      fdic = 2,
-      package_data = 3
-      };
-
+    struct fic_parser;
     }
 
   /**
-   * @internal
+   * @brief Transport mechanism descriptors
    *
+   * This enum defines the 4 possible transport mechanisms of a service component.
+   * Currently only transport_mechanism::package_data is supported.
+   */
+  enum struct transport_mechanism : std::uint8_t
+    {
+    stream_audio = 0,
+    stream_data = 1,
+    fdic = 2,
+    package_data = 3
+    };
+
+  /**
    * @brief Objects of this class represent Service Components (SCs) as defined in ETSI EN 300 401 Section 6
    *
    * Service Components (SCs) are an important part of DAB. They are what makes up
@@ -45,8 +39,6 @@ namespace dabdecode
   struct service_component
     {
     /**
-     * @internal
-     *
      * @brief Construct a service component
      *
      * A Service component as defined by the ETSI standard (see @ref service_component)
@@ -58,47 +50,35 @@ namespace dabdecode
      * that not CA applies to the SC but only that not the whole SC is subject to CA.
      *
      */
-    service_component(std::uint16_t const id, constants::transport_mechanism const transport,
+    service_component(std::uint16_t const id, transport_mechanism const transport,
                       bool const isPrimary, bool const caApplies);
 
     /**
-     * @internal
-     *
      * @brief Get the ID of an SC
      */
     std::uint16_t id() const;
 
     /**
-     * @internal
-     *
      * @brief Get the transport mechanism of an SC
      */
-    constants::transport_mechanism transport() const;
+    transport_mechanism transport() const;
 
     /**
-     * @internal
-     *
      * @brief Check if an SC is a primary SC.
      */
     bool primary() const;
 
     /**
-     * @internal
-     *
      * @brief Check if Conditional Access (CA) applies to the full SC.
      */
     bool ca_applies() const;
 
     /**
-     * @internal
-     *
      * @brief Get the ID of the associated subchannel
      */
     std::uint8_t subchannel() const;
 
     /**
-     * @internal
-     *
      * @brief Get the transported type
      */
     std::uint8_t type() const;
@@ -144,14 +124,14 @@ namespace dabdecode
       void type(std::uint8_t const type);
 
       std::uint16_t const m_id;
-      constants::transport_mechanism const m_transport;
+      transport_mechanism const m_transport;
       bool const m_isPrimary;
       bool const m_caApplies;
 
       std::uint8_t m_subchannelId{std::numeric_limits<std::uint8_t>::max()};
       std::uint8_t m_type{};
 
-      friend fic_parser;
+      friend __internal_dabdecode::fic_parser;
     };
 
   }

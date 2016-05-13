@@ -1,12 +1,15 @@
-#ifndef __DABDECODE_ENSEMBLE__ENSEMBLE
-#define __DABDECODE_ENSEMBLE__ENSEMBLE
+#ifndef __DAB_ENSEMBLE__ENSEMBLE
+#define __DAB_ENSEMBLE__ENSEMBLE
 
 #include "ensemble/subchannel.h"
 #include "ensemble/service.h"
 #include "ensemble/service_component.h"
+
 #include "frame/frame.h"
-#include "constants/transmission_mode.h"
+
 #include "parser/fic_parser.h"
+
+#include <types/transmission_mode.h>
 
 #include <cstdint>
 #include <iosfwd>
@@ -14,9 +17,8 @@
 #include <memory>
 #include <set>
 
-namespace dabdecode
+namespace dab
   {
-
   /**
    * @brief Access information and data of a DAB ensemble
    *
@@ -39,7 +41,7 @@ namespace dabdecode
      * @param data The OFDM symbol data stream
      * @param mode The transmission mode used for the ensemble
      */
-    ensemble(std::istream & sync, std::istream & data, constants::transmission_mode const mode = constants::transmission_mode::mode_1);
+    ensemble(std::istream & sync, std::istream & data, transmission_mode const mode = transmission_mode::mode_1);
 
     /**
      * @brief Retrieve the label of the ensemble
@@ -118,7 +120,7 @@ namespace dabdecode
      *
      * This function returns the data that is transported in the currently active service.
      */
-    std::pair<constants::transport_mechanism, std::vector<std::uint8_t>> active_data();
+    std::pair<transport_mechanism, std::vector<std::uint8_t>> active_data();
 
     private:
       /**
@@ -152,7 +154,7 @@ namespace dabdecode
        *
        * @brief Add a subchannel to the ensemble
        */
-      void add(subchannel && subchannel);
+      void add(__internal_dabdecode::subchannel && subchannel);
 
       /**
        * @internal
@@ -170,11 +172,11 @@ namespace dabdecode
 
       std::istream & m_sync;
       std::istream & m_data;
-      constants::transmission_mode const m_mode;
+      transmission_mode const m_mode;
 
-      fic_parser m_ficParser{*this};
-      std::unique_ptr<frame> m_frame{};
-      std::set<subchannel> m_subchannels{};
+      __internal_dabdecode::fic_parser m_ficParser{*this};
+      std::unique_ptr<__internal_dabdecode::frame> m_frame{};
+      std::set<__internal_dabdecode::subchannel> m_subchannels{};
       std::set<service> m_services{};
       std::set<service_component> m_components{};
       std::string m_label{};
@@ -182,7 +184,7 @@ namespace dabdecode
 
       service * m_activeService{};
 
-      friend fic_parser;
+      friend __internal_dabdecode::fic_parser;
     };
 
   }

@@ -1,18 +1,20 @@
-#include "constants/common.h"
 #include "ensemble/ensemble.h"
 #include "ensemble/service.h"
 #include "frame/cif.h"
 #include "frame/fib.h"
-#include "mode/modes.h"
+
+#include <types/transmission_mode.h>
 
 #include <algorithm>
 #include <iostream>
 #include <vector>
 
-namespace dabdecode
+
+namespace dab
   {
 
-  using namespace constants;
+  using namespace __internal_dabdecode;
+  using namespace __internal_common::types;
 
   ensemble::ensemble(std::istream & sync, std::istream & data, transmission_mode const mode)
     : m_sync{sync},
@@ -101,8 +103,8 @@ namespace dabdecode
           {
           if(component.id() == primaryComponent)
             {
-            auto const subchannel = component.subchannel();
-            auto realSubchannel = m_subchannels.find(dabdecode::subchannel(subchannel, 0, 0, 0, false, 0));
+            auto const subchannelId = component.subchannel();
+            auto realSubchannel = m_subchannels.find(subchannel(subchannelId, 0, 0, 0, false, 0));
 
             if(realSubchannel != m_subchannels.cend())
               {
@@ -119,7 +121,7 @@ namespace dabdecode
 
           for(auto const & cif : m_frame->msc())
             {
-            selected->process(cif.begin() + start * kCuBits, cif.begin() + end * kCuBits);
+            selected->process(cif.begin() + start * constants::kCuBits, cif.begin() + end * constants::kCuBits);
             }
           }
         }
@@ -139,13 +141,13 @@ namespace dabdecode
     return m_label.size() && m_id;
     }
 
-  std::pair<constants::transport_mechanism, std::vector<std::uint8_t>> ensemble::active_data()
+  std::pair<transport_mechanism, std::vector<std::uint8_t>> ensemble::active_data()
     {
     std::vector<std::uint8_t> data{};
 
     if(!m_activeService)
       {
-      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::stream_audio, data);
       }
 
     auto const serviceComponent = std::find_if(m_components.cbegin(), m_components.cend(), [&](service_component const & comp){
@@ -154,7 +156,7 @@ namespace dabdecode
 
     if(serviceComponent == m_components.cend())
       {
-      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::stream_audio, data);
       }
 
     auto const subchannel = std::find_if(m_subchannels.cbegin(), m_subchannels.cend(), [&](struct subchannel const & sub){
@@ -163,7 +165,7 @@ namespace dabdecode
 
     if(subchannel == m_subchannels.cend())
       {
-      return std::make_pair(constants::transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::stream_audio, data);
       }
 
     return std::make_pair(serviceComponent->transport(), subchannel->data());

@@ -20,7 +20,7 @@ int main()
     return 1;
     }
 
-  auto ensemble = dabdecode::ensemble{syncStream, dataStream, dabdecode::constants::transmission_mode::mode_1};
+  auto ensemble = dab::ensemble{syncStream, dataStream, dab::transmission_mode::mode_1};
 
   while(ensemble.update())
     {
@@ -28,7 +28,7 @@ int main()
       {
       for(auto const & service : ensemble.services())
         {
-        if(service.type() == dabdecode::constants::service_type::data)
+        if(service.type() == dab::service_type::data)
           {
           ensemble.activate(service);
           }
@@ -36,7 +36,7 @@ int main()
 
       auto const data = ensemble.active_data();
 
-      if(data.first == dabdecode::constants::transport_mechanism::package_data)
+      if(data.first == dab::transport_mechanism::package_data)
         {
         for(auto const & elem : data.second)
           {
