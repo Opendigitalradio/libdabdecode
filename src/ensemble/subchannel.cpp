@@ -201,31 +201,6 @@ namespace dab
 
       }
 
-    subchannel::subchannel(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
-                           std::uint16_t const bitrate, bool const isEep, std::uint16_t const eepProtectionLevel)
-      : m_id{id},
-        m_start{start},
-        m_size{size},
-        m_bitrate{bitrate},
-        m_isEep{isEep},
-        m_eepProtectionLevel(eepProtectionLevel & 0x00FF),
-        m_eepProtectionTable(eepProtectionLevel & 0xFF00 >> 8),
-        m_deinterleavedData(size * constants::kCuBits),
-        m_fsm{1, 4, constants::kEncoderPolynomials}
-      {
-
-      }
-
-    bool subchannel::operator<(subchannel const & other) const
-      {
-      return m_id < other.m_id;
-      }
-
-    bool subchannel::operator==(subchannel const & other) const
-      {
-      return m_id == other.m_id;
-      }
-
     std::uint16_t subchannel::id() const
       {
       return m_id;
@@ -266,10 +241,33 @@ namespace dab
       return m_data;
       }
 
+    std::shared_ptr<subchannel> subchannel::make(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
+                                                 std::uint16_t const bitrate, bool const isEep,
+                                                 std::uint16_t const eepProtectionLevel)
+      {
+      return std::shared_ptr<subchannel>{new subchannel{id, start, size, bitrate, isEep, eepProtectionLevel}};
+      }
+
+    subchannel::subchannel(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
+                           std::uint16_t const bitrate, bool const isEep, std::uint16_t const eepProtectionLevel)
+      : m_id{id},
+        m_start{start},
+        m_size{size},
+        m_bitrate{bitrate},
+        m_isEep{isEep},
+        m_eepProtectionLevel(eepProtectionLevel & 0x00FF),
+        m_eepProtectionTable(eepProtectionLevel & 0xFF00 >> 8),
+        m_deinterleavedData(size * constants::kCuBits),
+        m_fsm{1, 4, constants::kEncoderPolynomials}
+      {
+
+      }
+
+
     void subchannel::process(std::vector<float>::const_iterator samplesStart, std::vector<float>::const_iterator samplesEnd)
       {
       auto const fragmentSize = std::distance(samplesStart, samplesEnd);
-      auto const fragmentBit = constants::kInterleavingDelays[m_processedFragments];
+      auto const fragmentBit = constants::kInterleavingDelays[m_processedFragments % 16];
 
       for(int block = 0; block < fragmentSize / 16; ++block)
         {
@@ -338,7 +336,8 @@ namespace dab
           }
         }
 
-      auto const deconvolvedLength = (depunctured.size() - constants::kEncoderOutputLength * constants::kEncoderMemorySize) / constants::kEncoderOutputLength;
+      auto const deconvolvedLength = (depunctured.size() - constants::kEncoderOutputLength
+                                      * constants::kEncoderMemorySize) / constants::kEncoderOutputLength;
       auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[deconvolvedLength + constants::kEncoderMemorySize]);
 
       viterbi_algorithm_combined(m_fsm.I(),

@@ -1,10 +1,9 @@
 #ifndef __DAB_ENSEMBLE__SERVICE_COMPONENT
 #define __DAB_ENSEMBLE__SERVICE_COMPONENT
 
-#include <boost/operators.hpp>
-
 #include <cstdint>
 #include <limits>
+#include <memory>
 
 namespace dab
   {
@@ -12,20 +11,23 @@ namespace dab
   namespace __internal_dabdecode
     {
     struct fic_parser;
+    struct subchannel;
     }
 
   /**
    * @brief Transport mechanism descriptors
    *
    * This enum defines the 4 possible transport mechanisms of a service component.
-   * Currently only transport_mechanism::package_data is supported.
+   * Currently only transport_mechanism::package_data is supported. An additional
+   * mechanism is defined to represent an invalid state.
    */
   enum struct transport_mechanism : std::uint8_t
     {
     stream_audio = 0,
     stream_data = 1,
     fdic = 2,
-    package_data = 3
+    package_data = 3,
+    unknown = 4
     };
 
   /**
@@ -38,21 +40,6 @@ namespace dab
    */
   struct service_component
     {
-    /**
-     * @brief Construct a service component
-     *
-     * A Service component as defined by the ETSI standard (see @ref service_component)
-     * is comprised of an id and transport mechanism. It can either be the a primary
-     * SC or a secondary. Conditional Access (CA) provides means to "exclude" some users
-     * from comsuming a SC by means of encryption for example.
-     *
-     * @note A value of @p false for the parameter @p caApplies does not necessarily mean
-     * that not CA applies to the SC but only that not the whole SC is subject to CA.
-     *
-     */
-    service_component(std::uint16_t const id, transport_mechanism const transport,
-                      bool const isPrimary, bool const caApplies);
-
     /**
      * @brief Get the ID of an SC
      */
@@ -74,47 +61,48 @@ namespace dab
     bool ca_applies() const;
 
     /**
-     * @brief Get the ID of the associated subchannel
-     */
-    std::uint8_t subchannel() const;
-
-    /**
      * @brief Get the transported type
      */
     std::uint8_t type() const;
 
     /**
-     * @internal
-     *
-     * @brief Check if a SC is "less than" another SC.
-     *
-     * This check only checks whether the id of the current SC is less than the one of
-     * @p other.
-     *
-     * @note ETSI EN 300 401 does not explicitely state that what we consider to be the
-     * ID is the actual ID of the SC in all cases. However, Since in the three cases besides
-     * MSC packet data the ID is made up in parts of the subchannel ID, it has to be
-     * unique in all cases, since all subchannel IDs have to be unique inside an ensemble.
+     * @brief Get the ID of the associated subchannel
      */
-    bool operator<(service_component const & other) const;
-
-    /**
-     * @internal
-     *
-     * @brief Check if two SCs are "equal"
-     *
-     * This checks only considers SCs with the same ID to be equal. See #operator< for
-     * additional notes on the ID of an SC.
-     */
-    bool operator==(service_component const & other) const;
+    std::shared_ptr<__internal_dabdecode::subchannel> subchannel() const;
 
     private:
       /**
        * @internal
        *
+       * @brief Service component factory
+       *
+       * This factory can be used to create a new service component (SC)
+       *
+       * A Service component as defined by the ETSI standard (see @ref service_component)
+       * is comprised of an id and transport mechanism. It can either be the a primary
+       * SC or a secondary. Conditional Access (CA) provides means to "exclude" some users
+       * from comsuming a SC by means of encryption for example.
+       *
+       * @note A value of @p false for the parameter @p caApplies does not necessarily mean
+       * that not CA applies to the SC but only that not the whole SC is subject to CA.
+       */
+      static std::shared_ptr<service_component> make(std::uint16_t const id, transport_mechanism const transport,
+                                                     bool const isPrimary, bool const caApplies);
+      /**
+       * @internal
+       *
+       * @brief Construct a service component
+       *
+       * @sa #make
+       */
+      service_component(std::uint16_t const id, transport_mechanism const transport, bool const isPrimary, bool const caApplies);
+
+      /**
+       * @internal
+       *
        * @brief Set the associated subchannel id
        */
-      void subchannel(std::uint8_t const id);
+      void subchannel(std::shared_ptr<__internal_dabdecode::subchannel> subchannel);
 
       /**
        * @internal
@@ -128,6 +116,7 @@ namespace dab
       bool const m_isPrimary;
       bool const m_caApplies;
 
+      std::shared_ptr<__internal_dabdecode::subchannel> m_subchannel{};
       std::uint8_t m_subchannelId{std::numeric_limits<std::uint8_t>::max()};
       std::uint8_t m_type{};
 

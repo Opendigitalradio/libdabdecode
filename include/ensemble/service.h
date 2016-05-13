@@ -1,16 +1,16 @@
 #ifndef __DAB_ENSEMBLE__SERVICE
 #define __DAB_ENSEMBLE__SERVICE
 
-#include "ensemble/service_component.h"
-
-#include <boost/operators.hpp>
-
 #include <cstdint>
-#include <set>
+#include <map>
+#include <memory>
 #include <string>
 
 namespace dab
   {
+
+  struct service_component;
+  struct ensemble;
 
   /**
    * @brief The types of different services.
@@ -26,8 +26,6 @@ namespace dab
     data
     };
 
-  struct ensemble;
-
   namespace __internal_dabdecode
     {
     struct fic_parser;
@@ -41,13 +39,8 @@ namespace dab
    * album covers, etc. Thus the service, besides the @ref ensemble is what
    * you will want to use to received audio/data transmitted via DAB.
    */
-  struct service : boost::less_than_comparable<service>, boost::equality_comparable<service>
+  struct service
     {
-
-    bool operator<(service const & other) const;
-
-    bool operator==(service const & other) const;
-
     /**
      * @brief Retrive the ID of a service
      *
@@ -69,18 +62,23 @@ namespace dab
      */
     service_type type() const;
 
+    /**
+     * @brief Retrieve the primary service component of a service
+     */
+    std::shared_ptr<service_component> primary() const;
+
     private:
+      static std::shared_ptr<service> make(std::uint32_t const id, bool const isLocal);
+
       service(std::uint32_t const id, bool const isLocal);
 
-      void add(service_component const & component);
+      void add(std::shared_ptr<service_component> component);
 
       void label(std::string && label);
 
       void type(service_type const type);
 
-      std::uint16_t primary() const;
-
-      void primary(std::uint16_t const component);
+      void primary(std::shared_ptr<service_component> component);
 
       std::uint32_t const m_id;
       bool const m_isLocal;
@@ -88,8 +86,8 @@ namespace dab
       std::string m_label{};
       service_type m_type{service_type::programme};
 
-      std::uint16_t m_primaryComponent{};
-      std::set<std::uint16_t> m_components{};
+      std::shared_ptr<service_component> m_primaryComponent{};
+      std::map<std::uint16_t, std::shared_ptr<service_component>> m_components{};
 
       friend __internal_dabdecode::fic_parser;
       friend ensemble;

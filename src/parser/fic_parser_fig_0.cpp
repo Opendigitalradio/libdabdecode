@@ -59,15 +59,18 @@ namespace dab
         if(!isLongForm)
           {
           auto const descriptor = constants::kUepSubchannelDescriptors[*pos & 63];
-          m_target.add({subchannelId, startAddress, descriptor.size, descriptor.bitrate, false, 0});
+          auto subchannel = subchannel::make(subchannelId, startAddress, descriptor.size, descriptor.bitrate, false, 0);
+          m_target.add(subchannel);
           }
         else
           {
           auto const option = *pos >> 4 & 7;
           auto const protection = *pos >> 2 & 3;
           auto const size = std::uint16_t((std::uint16_t(*pos & 3) << 8) + *++pos);
-          m_target.add({subchannelId, startAddress, size, constants::eep_table_bitrate(option, size, protection),
-                        true, std::uint16_t(option << 8 | protection)});
+          auto const subchannel = subchannel::make(subchannelId, startAddress, size,
+                                                   constants::eep_table_bitrate(option, size, protection), true,
+                                                   std::uint16_t(option << 8 | protection));
+          m_target.add(subchannel);
           }
 
         }
@@ -96,29 +99,28 @@ namespace dab
         auto const isLocal = bool(*++pos >> 7 & 1);
         auto const nofScs  = *pos & 15;
 
-        auto srv = service{serviceId, isLocal};
-        srv.type(isData ? service_type::data : service_type::programme);
+        auto srv = service::make(serviceId, isLocal);
+        srv->type(isData ? service_type::data : service_type::programme);
 
         for(auto scIndex = 0; scIndex < nofScs; ++scIndex)
           {
           auto const transportMechanism = transport_mechanism(*++pos >> 6);
           auto const isPrimary = bool(*(pos + 1) >> 1 & 1);
 
-          auto component = service_component{std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
-                   transportMechanism, isPrimary, bool(*(pos + 1) & 1)};
-
-          srv.add(component);
+          auto component = service_component::make(std::uint16_t(std::uint16_t(*pos & 63) << 6 | *(pos + 1) >> 2),
+                                                   transportMechanism, isPrimary, bool(*(pos + 1) & 1));
+          m_target.add(component);
+          srv->add(component);
 
           if(isPrimary)
             {
-            srv.primary(component.id());
+            srv->primary(component);
             }
 
-          m_target.add(std::move(component));
           pos += 1;
           }
 
-        m_target.add(std::move(srv));
+        m_target.add(srv);
         }
       }
 
@@ -149,10 +151,13 @@ namespace dab
 
         for(auto & component : m_target.m_components)
           {
-          if(component.id() == componentId)
+          if(component.second->id() == componentId)
             {
-            const_cast<service_component &>(component).subchannel(subchannelId);
-            const_cast<service_component &>(component).type(componentType);
+            if(m_target.m_subchannels.find(subchannelId) != m_target.m_subchannels.end())
+              {
+              component.second->subchannel(m_target.m_subchannels[subchannelId]);
+              component.second->type(componentType);
+              }
             }
           }
 

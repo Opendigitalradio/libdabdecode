@@ -28,9 +28,9 @@ int main()
       {
       for(auto const & service : ensemble.services())
         {
-        if(service.type() == dab::service_type::data)
+        if(service.second->type() == dab::service_type::data)
           {
-          ensemble.activate(service);
+          ensemble.activate(service.second);
           }
         }
 

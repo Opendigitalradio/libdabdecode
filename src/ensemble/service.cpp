@@ -4,16 +4,6 @@
 namespace dab
   {
 
-  bool service::operator<(service const & other) const
-    {
-    return m_id < other.m_id;
-    }
-
-  bool service::operator==(service const & other) const
-    {
-    return m_id == other.m_id;
-    }
-
   std::uint32_t service::id() const
     {
     return m_id;
@@ -24,6 +14,16 @@ namespace dab
     return m_type;
     }
 
+  std::shared_ptr<service_component> service::primary() const
+    {
+    return m_primaryComponent;
+    }
+
+  std::shared_ptr<service> service::make(std::uint32_t const id, bool const isLocal)
+    {
+    return std::shared_ptr<service>{new service{id, isLocal}};
+    }
+
   service::service(std::uint32_t const id, bool const isLocal)
     : m_id{id},
       m_isLocal{isLocal}
@@ -31,9 +31,12 @@ namespace dab
 
     }
 
-  void service::add(service_component const & component)
+  void service::add(std::shared_ptr<service_component> component)
     {
-    m_components.insert(component.id());
+    if(component && m_components.find(component->id()) == m_components.cend())
+      {
+      m_components[component->id()] = component;
+      }
     }
 
   void service::label(std::string && label)
@@ -46,12 +49,7 @@ namespace dab
     m_type = type;
     }
 
-  std::uint16_t service::primary() const
-    {
-    return m_primaryComponent;
-    }
-
-  void service::primary(std::uint16_t const component)
+  void service::primary(std::shared_ptr<service_component> component)
     {
     m_primaryComponent = component;
     }

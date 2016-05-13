@@ -3,7 +3,6 @@
 
 #include "ensemble/subchannel.h"
 #include "ensemble/service.h"
-#include "ensemble/service_component.h"
 
 #include "frame/frame.h"
 
@@ -16,15 +15,21 @@
 #include <string>
 #include <memory>
 #include <set>
+#include <map>
 
 namespace dab
   {
+
+  struct service_component;
+  enum struct transport_mechanism : std::uint8_t;
+
   /**
    * @brief Access information and data of a DAB ensemble
    *
    * This class provides acces to the information and data of a
    * DAB ensemble. It gives access to services and subchannels.
    */
+
   struct ensemble
     {
     /**
@@ -86,7 +91,7 @@ namespace dab
      * an ensemble. To activate the decoding of a service, you need to
      * select a service from this set and pass it to the #activate function.
      */
-    std::set<service> const & services() const;
+    std::map<std::uint32_t, std::shared_ptr<service>> const & services() const;
 
     /**
      * @brief Update the ensemble
@@ -104,7 +109,7 @@ namespace dab
      *
      * @see #services
      */
-    void activate(service const & service);
+    void activate(std::shared_ptr<service> const & service);
 
     /**
      * @brief Check if the ensemble is valid
@@ -154,21 +159,21 @@ namespace dab
        *
        * @brief Add a subchannel to the ensemble
        */
-      void add(__internal_dabdecode::subchannel && subchannel);
+      void add(std::shared_ptr<__internal_dabdecode::subchannel> subchannel);
 
       /**
        * @internal
        *
        * @brief Add a service to the ensemble
        */
-      void add(service && service);
+      void add(std::shared_ptr<service> service);
 
       /**
        * @internal
        *
        * @brief Add a service component to the ensemble
        */
-      void add(service_component && component);
+      void add(std::shared_ptr<service_component> component);
 
       std::istream & m_sync;
       std::istream & m_data;
@@ -176,13 +181,15 @@ namespace dab
 
       __internal_dabdecode::fic_parser m_ficParser{*this};
       std::unique_ptr<__internal_dabdecode::frame> m_frame{};
-      std::set<__internal_dabdecode::subchannel> m_subchannels{};
-      std::set<service> m_services{};
-      std::set<service_component> m_components{};
+
+      std::map<std::uint32_t, std::shared_ptr<service>> m_services{};
+      std::map<std::uint16_t, std::shared_ptr<__internal_dabdecode::subchannel>> m_subchannels{};
+      std::map<std::uint16_t, std::shared_ptr<service_component>> m_components{};
+
+      std::shared_ptr<service> m_activeService{};
+
       std::string m_label{};
       std::uint16_t m_id{};
-
-      service * m_activeService{};
 
       friend __internal_dabdecode::fic_parser;
     };

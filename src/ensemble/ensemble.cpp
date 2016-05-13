@@ -1,5 +1,7 @@
 #include "ensemble/ensemble.h"
 #include "ensemble/service.h"
+#include "ensemble/service_component.h"
+
 #include "frame/cif.h"
 #include "frame/fib.h"
 
@@ -43,7 +45,7 @@ namespace dab
     return m_id & 0xFFF;
     }
 
-  std::set<service> const & ensemble::services() const
+  std::map<std::uint32_t, std::shared_ptr<service>> const & ensemble::services() const
     {
     return m_services;
     }
@@ -58,32 +60,35 @@ namespace dab
     m_id = id;
     }
 
-  void ensemble::add(subchannel && subchannel)
+  void ensemble::add(std::shared_ptr<subchannel> subchannel)
     {
-    m_subchannels.insert(std::move(subchannel));
-    }
-
-  void ensemble::add(service && service)
-    {
-    m_services.insert(std::move(service));
-    }
-
-  void ensemble::add(service_component && component)
-    {
-    m_components.insert(std::move(component));
-    }
-
-  void ensemble::activate(service const & service)
-    {
-    auto const pos = m_services.find(service);
-    if(pos != m_services.cend())
+    if(subchannel && m_subchannels.find(subchannel->id()) == m_subchannels.cend())
       {
-      auto const servicePtr = const_cast<struct service *>(&*pos);
+      m_subchannels[subchannel->id()] = subchannel;
+      }
+    }
 
-      if(servicePtr != m_activeService)
-        {
-        m_activeService = servicePtr;
-        }
+  void ensemble::add(std::shared_ptr<service> service)
+    {
+    if(service && m_services.find(service->id()) == m_services.cend())
+      {
+      m_services[service->id()] = service;
+      }
+    }
+
+  void ensemble::add(std::shared_ptr<service_component> component)
+    {
+    if(component && m_components.find(component->id()) == m_components.cend())
+      {
+      m_components[component->id()] = component;
+      }
+    }
+
+  void ensemble::activate(std::shared_ptr<service> const & service)
+    {
+    if(service && m_services.find(service->id()) != m_services.cend())
+      {
+      m_activeService = service;
       }
     }
 
@@ -97,31 +102,17 @@ namespace dab
       if(m_activeService)
         {
         auto const primaryComponent = m_activeService->primary();
-        subchannel * selected = nullptr;
 
-        for(auto & component : m_components)
+        if(primaryComponent)
           {
-          if(component.id() == primaryComponent)
-            {
-            auto const subchannelId = component.subchannel();
-            auto realSubchannel = m_subchannels.find(subchannel(subchannelId, 0, 0, 0, false, 0));
+          auto const subchannel =  primaryComponent->subchannel();
 
-            if(realSubchannel != m_subchannels.cend())
-              {
-              selected = const_cast<struct subchannel *>(&*realSubchannel);
-              break;
-              }
-            }
-          }
-
-        if(selected)
-          {
-          auto const start = selected->start();
-          auto const end = start + selected->size();
+          auto const start = subchannel->start();
+          auto const end = start + subchannel->size();
 
           for(auto const & cif : m_frame->msc())
             {
-            selected->process(cif.begin() + start * constants::kCuBits, cif.begin() + end * constants::kCuBits);
+            subchannel->process(cif.begin() + start * constants::kCuBits, cif.begin() + end * constants::kCuBits);
             }
           }
         }
@@ -147,28 +138,24 @@ namespace dab
 
     if(!m_activeService)
       {
-      return std::make_pair(transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::unknown, data);
       }
 
-    auto const serviceComponent = std::find_if(m_components.cbegin(), m_components.cend(), [&](service_component const & comp){
-      return comp.id() == m_activeService->primary();
-      });
+    auto const & service_component = m_activeService->primary();
 
-    if(serviceComponent == m_components.cend())
+    if(!service_component)
       {
-      return std::make_pair(transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::unknown, data);
       }
 
-    auto const subchannel = std::find_if(m_subchannels.cbegin(), m_subchannels.cend(), [&](struct subchannel const & sub){
-      return sub.id() == serviceComponent->subchannel();
-      });
+    auto const & subchannel = service_component->subchannel();
 
-    if(subchannel == m_subchannels.cend())
+    if(!subchannel)
       {
-      return std::make_pair(transport_mechanism::stream_audio, data);
+      return std::make_pair(transport_mechanism::unknown, data);
       }
 
-    return std::make_pair(serviceComponent->transport(), subchannel->data());
+    return std::make_pair(service_component->transport(), subchannel->data());
     }
 
   bool ensemble::next_frame()
