@@ -17,7 +17,7 @@ namespace dab
 
     struct frame
       {
-      frame(std::vector<float> && data, transmission_mode const mode);
+      frame(std::vector<float> && data, __internal_common::types::transmission_mode const & mode);
 
       std::vector<struct fib> fic();
 
@@ -27,7 +27,7 @@ namespace dab
         void extract_fic_codewords();
 
         std::vector<float> const m_data;
-        transmission_mode const m_mode;
+        __internal_common::types::transmission_mode const m_mode;
         fsm const m_fsm;
 
         std::vector<std::vector<uint8_t>> m_ficCodewords{};

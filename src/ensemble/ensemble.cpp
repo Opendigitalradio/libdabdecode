@@ -5,12 +5,11 @@
 #include "frame/cif.h"
 #include "frame/fib.h"
 
-#include <types/transmission_mode.h>
+#include <constants/transmission_modes.h>
 
 #include <algorithm>
 #include <iostream>
 #include <vector>
-
 
 namespace dab
   {
@@ -18,7 +17,7 @@ namespace dab
   using namespace __internal_dabdecode;
   using namespace __internal_common::types;
 
-  ensemble::ensemble(std::istream & sync, std::istream & data, transmission_mode const mode)
+  ensemble::ensemble(std::istream & sync, std::istream & data, transmission_mode const & mode)
     : m_sync{sync},
       m_data{data},
       m_mode{mode}
@@ -166,19 +165,19 @@ namespace dab
       }
 
     auto synced = '\0';
-    auto extracted = std::vector<float>(sizeof(float) * frame_size(m_mode));
+    auto extracted = std::vector<float>(sizeof(float) * m_mode.frame_symbols * m_mode.symbol_bits);
     auto input = reinterpret_cast<char *>(extracted.data());
 
     while(m_sync >> synced && !synced)
       {
-      m_data.ignore(sizeof(float) * symbol_size(m_mode));
+      m_data.ignore(sizeof(float) * m_mode.symbol_bits);
       }
 
-    m_data.read(input, sizeof(float) * symbol_size(m_mode));
+    m_data.read(input, sizeof(float) * m_mode.symbol_bits);
 
-    for(std::size_t symbol{1}; symbol < frame_symbols(m_mode); ++symbol)
+    for(std::size_t symbol{1}; symbol < m_mode.frame_symbols; ++symbol)
       {
-      if(!m_data.read(input + symbol * sizeof(float) * symbol_size(m_mode), sizeof(float) * symbol_size(m_mode)))
+      if(!m_data.read(input + symbol * sizeof(float) * m_mode.symbol_bits, sizeof(float) * m_mode.symbol_bits))
         {
         m_frame.reset();
         return false;

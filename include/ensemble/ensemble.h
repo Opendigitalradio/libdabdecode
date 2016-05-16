@@ -40,13 +40,15 @@ namespace dab
      * The synchronization stream @p sync is expected to contain "zero" bytes unless
      * the begin of a frame is reached. The data stream on the other hand must contain
      * a single-precision 32-bit foating point stream of OFDM symbols. The transmission
-     * mode can be specified vi the @p mode argument, which default to DAB TM 1.
+     * mode can be specified vi the @p mode argument, with possible values being
+     * #transmission_modes::kTransmissionMode1, #transmission_modes::kTransmissionMode2,
+     * #transmission_modes::kTransmissionMode3 and #transmission_modes::kTransmissionMode4
      *
      * @param sync The synchronization stream
      * @param data The OFDM symbol data stream
      * @param mode The transmission mode used for the ensemble
      */
-    ensemble(std::istream & sync, std::istream & data, transmission_mode const mode = transmission_mode::mode_1);
+    ensemble(std::istream & sync, std::istream & data, __internal_common::types::transmission_mode const & mode);
 
     /**
      * @brief Retrieve the label of the ensemble
@@ -177,7 +179,7 @@ namespace dab
 
       std::istream & m_sync;
       std::istream & m_data;
-      transmission_mode const m_mode;
+      __internal_common::types::transmission_mode const & m_mode;
 
       __internal_dabdecode::fic_parser m_ficParser{*this};
       std::unique_ptr<__internal_dabdecode::frame> m_frame{};

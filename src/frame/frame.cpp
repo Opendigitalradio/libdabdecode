@@ -4,7 +4,7 @@
 #include "frame/frame.h"
 #include "viterbi/core_algorithms.h"
 
-#include <types/transmission_mode.h>
+#include <constants/transmission_modes.h>
 
 #include <memory>
 #include <stdexcept>
@@ -22,13 +22,13 @@ namespace dab
     namespace
       {
 
-      std::vector<float> depuncture_fic_codeword(std::vector<float> && codeword, transmission_mode const mode)
+      std::vector<float> depuncture_fic_codeword(std::vector<float> && codeword, transmission_mode const & mode)
         {
-        std::vector<float> depunctured(punctured_codeword_size(mode) * 4 / 3 + 24);
+        std::vector<float> depunctured(mode.punctured_codeword_size * 4 / 3 + 24);
         auto inputIndex = std::size_t{};
         auto outputIndex = std::size_t{};
 
-        auto const nofFirstBlocks = mode == transmission_mode::mode_3 ? 29 : 21;
+        auto const nofFirstBlocks = mode.id == transmission_modes::kTransmissionMode3.id ? 29 : 21;
         auto const nofSecondBlocks = 3;
         auto const nofTailBits = 24;
 
@@ -62,10 +62,10 @@ namespace dab
         return depunctured;
         }
 
-      void descramble_fic_codeword(std::vector<uint8_t> & scrambled, transmission_mode const mode)
+      void descramble_fic_codeword(std::vector<uint8_t> & scrambled, transmission_mode const & mode)
         {
         auto scramblerRegister = std::array<uint8_t, 9>{{1, 1, 1, 1, 1, 1, 1, 1, 1}};
-        auto const ficCodewordSize = fic_codeword_size(mode);
+        auto const ficCodewordSize = mode.fib_codeword_bits;
         auto temporary = uint8_t{};
 
         for(std::size_t idx{}; idx < ficCodewordSize; ++idx)
@@ -102,13 +102,13 @@ namespace dab
 
       }
 
-    frame::frame(std::vector<float> && data, transmission_mode const mode)
+    frame::frame(std::vector<float> && data, transmission_mode const & mode)
       : m_data{std::move(data)},
         m_mode{mode},
         m_fsm{kEncoderInputLength,kEncoderOutputLength, kEncoderPolynomials}
 
       {
-      if(m_data.size() != frame_size(m_mode) * sizeof(float))
+      if(m_data.size() != m_mode.symbol_bits * m_mode.frame_symbols * sizeof(float))
         {
         throw std::runtime_error{std::string{"Invalid data length "} + std::to_string(m_data.size())};
         }
@@ -122,7 +122,7 @@ namespace dab
 
       for(auto & cw : m_ficCodewords)
         {
-        for(std::size_t fibIdx{}; fibIdx < fibs_in_codeword(m_mode); ++fibIdx)
+        for(std::size_t fibIdx{}; fibIdx < m_mode.fib_codeword_bits / 256; ++fibIdx)
           {
           cw[fibIdx * 32 + 30] = ~cw[fibIdx * 32 + 30];
           cw[fibIdx * 32 + 31] = ~cw[fibIdx * 32 + 31];
@@ -145,9 +145,9 @@ namespace dab
     std::vector<cif> frame::msc() const
       {
       auto msc = std::vector<cif>{};
-      auto pos = m_data.cbegin() + fic_size(m_mode);
+      auto pos = m_data.cbegin() + m_mode.fic_symbols * m_mode.symbol_bits;
 
-      for(std::size_t index{}; index < msc_cifs(m_mode); ++index)
+      for(std::size_t index{}; index < m_mode.frame_cifs; ++index)
         {
         msc.push_back(cif{pos + index * kCusPerCif * kCuBits, pos + (index + 1) * kCusPerCif * kCuBits});
         }
@@ -159,17 +159,17 @@ namespace dab
       {
       using namespace constants;
 
-      auto const puncturedCodewordSize = punctured_codeword_size(m_mode);
-      auto const ficSize = fic_size(m_mode);
+      auto const puncturedCodewordSize = m_mode.punctured_codeword_size;
+      auto const ficSize = m_mode.fic_symbols * m_mode.symbol_bits;
       auto nofCodewords = ficSize / puncturedCodewordSize;
 
       auto beginIterator = m_data.cbegin();
       auto endIterator = m_data.cbegin() + puncturedCodewordSize;
 
-      for(auto index = std::size_t{}; index < nofCodewords; ++index)
+      for(auto index = 0; index < nofCodewords; ++index)
         {
         auto depunctured = depuncture_fic_codeword({beginIterator, endIterator}, m_mode);
-        auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[fic_codeword_size(m_mode) + 6]);
+        auto deconvolved = std::unique_ptr<uint8_t[]>(new uint8_t[m_mode.fib_codeword_bits + 6]);
 
         viterbi_algorithm_combined(m_fsm.I(),
                                    m_fsm.S(),
@@ -177,14 +177,14 @@ namespace dab
                                    m_fsm.OS(),
                                    m_fsm.PS(),
                                    m_fsm.PI(),
-                                   fic_codeword_size(m_mode) + 6,
+                                   m_mode.fib_codeword_bits + 6,
                                    0,
                                    0,
                                    4,
                                    depunctured.data(),
                                    deconvolved.get());
 
-        auto cw = std::vector<uint8_t>{deconvolved.get(), deconvolved.get() + fic_codeword_size(m_mode)};
+        auto cw = std::vector<uint8_t>{deconvolved.get(), deconvolved.get() + m_mode.fib_codeword_bits};
         descramble_fic_codeword(cw, m_mode);
         assemble_bytes(cw);
         m_ficCodewords.push_back(std::move(cw));

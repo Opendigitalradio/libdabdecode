@@ -20,7 +20,7 @@ int main()
     return 1;
     }
 
-  auto ensemble = dab::ensemble{syncStream, dataStream, dab::transmission_mode::mode_1};
+  auto ensemble = dab::ensemble{syncStream, dataStream, dab::transmission_modes::kTransmissionMode1};
 
   while(ensemble.update())
     {

@@ -4,6 +4,7 @@
 #include "ensemble/ensemble.h"
 #include "ensemble/service.h"
 #include "ensemble/service_component.h"
+#include <constants/transmission_modes.h>
 
 #endif
 
