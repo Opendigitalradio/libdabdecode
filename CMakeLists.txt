@@ -76,9 +76,15 @@ if(BUILD_DOCUMENTATION OR BUILD_INTERNAL_DOCUMENTATION)
 
   find_package(Doxygen REQUIRED)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+
   add_custom_target(${PROJECT_NAME}_doc ALL ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                     COMMENT "Generating API documentation" VERBATIM)
+
+  add_custom_target(${PROJECT_NAME}_doc_latex_compile ALL make
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/latex
+                    DEPENDS ${PROJECT_NAME}_doc
+                    COMMENT "Compiling API documentation" VERBATIM)
 endif()
 
 

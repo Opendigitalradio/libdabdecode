@@ -8,7 +8,7 @@
 
 #include "parser/fic_parser.h"
 
-#include <types/transmission_mode.h>
+#include <constants/transmission_modes.h>
 
 #include <cstdint>
 #include <iosfwd>
@@ -41,8 +41,8 @@ namespace dab
      * the begin of a frame is reached. The data stream on the other hand must contain
      * a single-precision 32-bit foating point stream of OFDM symbols. The transmission
      * mode can be specified vi the @p mode argument, with possible values being
-     * #transmission_modes::kTransmissionMode1, #transmission_modes::kTransmissionMode2,
-     * #transmission_modes::kTransmissionMode3 and #transmission_modes::kTransmissionMode4
+     * kTransmissionMode1, @ref transmission_modes::kTransmissionMode2,
+     * #transmission_modes::kTransmissionMode3 and #kTransmissionMode4
      *
      * @param sync The synchronization stream
      * @param data The OFDM symbol data stream
