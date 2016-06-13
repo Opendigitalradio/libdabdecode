@@ -1,6 +1,3 @@
-[submodule "sample-data"]
-	path = build/data
-	url = https://source.dab.arknet.ch/dab-data/libdabdecode-sample-data.git
 [submodule "common"]
 	path = common
 	url = https://source.dab.arknet.ch/dab-data/libdabcommon.git

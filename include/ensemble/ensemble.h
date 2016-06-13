@@ -34,19 +34,15 @@ namespace dab
   struct ensemble
     {
     /**
-     * @brief Construct a @ref ensemble from a synchronization and a data stream.
+     * @brief Construct a @ref ensemble that acquires samples from the specified queue
      *
      * An ensemble is the most basic and interesting entity exposed by libdabdecode.
      * It provides access to data services and audio services, also called programmes.
-     * The synchronization stream @p sync is expected to contain "zero" bytes unless
-     * the begin of a frame is reached. The data stream on the other hand must contain
-     * a single-precision 32-bit foating point stream of OFDM symbols. The transmission
-     * mode can be specified vi the @p mode argument, with possible values being
-     * kTransmissionMode1, @ref transmission_modes::kTransmissionMode2,
-     * #transmission_modes::kTransmissionMode3 and #kTransmissionMode4
+     * The transmission mode can be specified vi the @p mode argument, with possible
+     * values being @p kTransmissionMode1, @p kTransmissionMode2, @p kTransmissionMode3
+     * and @p kTransmissionMode4 in the namespace @p dab::transmission_modes
      *
-     * @param sync The synchronization stream
-     * @param data The OFDM symbol data stream
+     * @param symbols The OFDM symbol queue
      * @param mode The transmission mode used for the ensemble
      */
     ensemble(symbol_queue_t & symbols, __internal_common::types::transmission_mode const & mode);

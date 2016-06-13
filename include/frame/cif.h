@@ -41,7 +41,7 @@ namespace dab
     /**
      * @internal
      *
-     * @brief This call represents a Common Interleaved Frame (CIF)
+     * @brief This class represents a Common Interleaved Frame (CIF)
      *
      * A CIF conatains the Capacity Units (CUs) which in turn contain the data that
      * is being transported in different subchannels. The subchannel data is

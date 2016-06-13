@@ -8,9 +8,7 @@ endif()
 option(BUILD_DOCUMENTATION          "Build the libdabdecode documentation." OFF)
 option(BUILD_DOCUMENTATION_ONLY     "Only build the documentation not the libraries." OFF)
 option(BUILD_INTERNAL_DOCUMENTATION "Generate internal developer documentation." OFF)
-option(WITH_TESTS                   "Build and run the unit tests." ON)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+option(DOCUMENTATION_FOR_THESIS     "Build the documentation for the thesis with black hyperlinks." OFF)
 
 set(OUTPUT_PREFIX "${CMAKE_BINARY_DIR}/products/${CMAKE_BUILD_TYPE}" CACHE STRING "The build product prefix" FORCE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_PREFIX}/bin" CACHE STRING "The output path for executables" FORCE)
@@ -44,26 +42,27 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -Os")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 if(BUILD_DOCUMENTATION_ONLY)
   set(BUILD_DOCUMENTATION ON CACHE BOOL "Build the libdabdecode documentation." FORCE)
 else()
   find_package(Boost REQUIRED)
 
-  add_subdirectory("common")
   include_directories("include")
-  include_directories(${DABCOMMON_INCLUDES})
+  add_subdirectory("common")
+  include_directories(SYSTEM ${DABCOMMON_INCLUDES})
   add_subdirectory("src")
-
-  if(WITH_TESTS)
-    include(CUTE)
-    include_directories(SYSTEM "third_party/cute")
-    add_subdirectory(test)
-  endif()
 endif()
 
 if(BUILD_DOCUMENTATION OR BUILD_INTERNAL_DOCUMENTATION)
+
+  if(DOCUMENTATION_FOR_THESIS)
+    set(LATEX_HEADER_PREFIX "thesis_")
+  else()
+    set(LATEX_HEADER_PREFIX "")
+  endif()
+
   set(GENERATE_INTERNAL_DOCS NO)
 
   if(BUILD_INTERNAL_DOCUMENTATION)
@@ -81,16 +80,16 @@ if(BUILD_DOCUMENTATION OR BUILD_INTERNAL_DOCUMENTATION)
                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                     COMMENT "Generating API documentation" VERBATIM)
 
-  add_custom_target(${PROJECT_NAME}_doc_latex_compile ALL make
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/latex
+  add_custom_target(${PROJECT_NAME}_doc_pdf ALL make pdf &>/dev/null
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_doc/latex
                     DEPENDS ${PROJECT_NAME}_doc
-                    COMMENT "Compiling API documentation" VERBATIM)
+                    COMMENT "Compiling API documentation")
 endif()
 
 
 if(HAS_PARENT)
   set(DABDECODE_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/include;${DABCOMMON_INCLUDES}" PARENT_SCOPE)
-  set(DABDECODE_LIBRARIES_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"  PARENT_SCOPE)
-  set(DABDECODE_SHARED_LIBRARIES "${PROJECT_NAME}"  PARENT_SCOPE)
+  set(DABDECODE_LIBRARIES_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" PARENT_SCOPE)
+  set(DABDECODE_SHARED_LIBRARIES "${PROJECT_NAME}" PARENT_SCOPE)
   set(DABDECODE_STATIC_LIBRARIES "${PROJECT_NAME}_static"  PARENT_SCOPE)
 endif()

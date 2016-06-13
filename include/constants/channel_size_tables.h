@@ -16,7 +16,7 @@ namespace dab
       /**
        * @internal
        *
-       * @brief An element of the subchannel descriptor table @ref kUepSubchannelDescriptors
+       * @brief An element of the subchannel descriptor table #kUepSubchannelDescriptors
        *
        * Objects of this type represent a subchannel descriptor for a given bitrate
        * and protection level. These objects are used to determine the size of a
