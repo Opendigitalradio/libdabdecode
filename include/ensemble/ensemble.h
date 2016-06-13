@@ -9,6 +9,7 @@
 #include "parser/fic_parser.h"
 
 #include <constants/transmission_modes.h>
+#include <types/common_types.h>
 
 #include <cstdint>
 #include <iosfwd>
@@ -48,7 +49,7 @@ namespace dab
      * @param data The OFDM symbol data stream
      * @param mode The transmission mode used for the ensemble
      */
-    ensemble(std::istream & sync, std::istream & data, __internal_common::types::transmission_mode const & mode);
+    ensemble(symbol_queue_t & symbols, __internal_common::types::transmission_mode const & mode);
 
     /**
      * @brief Retrieve the label of the ensemble
@@ -177,8 +178,7 @@ namespace dab
        */
       void add(std::shared_ptr<service_component> component);
 
-      std::istream & m_sync;
-      std::istream & m_data;
+      symbol_queue_t & m_symbolQueue;
       __internal_common::types::transmission_mode const & m_mode;
 
       __internal_dabdecode::fic_parser m_ficParser{*this};

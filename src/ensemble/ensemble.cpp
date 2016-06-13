@@ -8,7 +8,7 @@
 #include <constants/transmission_modes.h>
 
 #include <algorithm>
-#include <iostream>
+#include <cstring>
 #include <vector>
 
 namespace dab
@@ -17,9 +17,8 @@ namespace dab
   using namespace __internal_dabdecode;
   using namespace __internal_common::types;
 
-  ensemble::ensemble(std::istream & sync, std::istream & data, transmission_mode const & mode)
-    : m_sync{sync},
-      m_data{data},
+  ensemble::ensemble(symbol_queue_t & symbols, transmission_mode const & mode)
+    : m_symbolQueue{symbols},
       m_mode{mode}
     {
     }
@@ -159,57 +158,18 @@ namespace dab
 
   bool ensemble::next_frame()
     {
-    /*
-    if(!m_sync || !m_data)
-      {
-      return false;
-      }
-
-    auto synced = '\0';
+    auto symbol = std::vector<float>{};
     auto extracted = std::vector<float>(sizeof(float) * m_mode.frame_symbols * m_mode.symbol_bits);
-    auto input = reinterpret_cast<char *>(extracted.data());
 
-    while(m_sync >> synced && !synced)
+    for(auto symbolIndex = 0u; symbolIndex < m_mode.frame_symbols; ++symbolIndex)
       {
-      m_data.ignore(sizeof(float) * m_mode.symbol_bits);
-      }
-
-    m_data.read(input, sizeof(float) * m_mode.symbol_bits);
-
-    for(std::size_t symbol{1}; symbol < m_mode.frame_symbols; ++symbol)
-      {
-      if(!m_data.read(input + symbol * sizeof(float) * m_mode.symbol_bits, sizeof(float) * m_mode.symbol_bits))
+      while(!m_symbolQueue.wait_dequeue_timed(symbol, 100))
         {
-        m_frame.reset();
-        return false;
         }
 
-      if(!m_sync.ignore(1))
-        {
-        m_frame.reset();
-        return false;
-        }
+      std::memcpy(extracted.data() + symbolIndex * sizeof(float) * m_mode.symbol_bits,
+                  symbol.data(), symbol.size() * sizeof(float));
       }
-
-    m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
-    return (bool)m_frame;
-    */
-
-    auto extracted = std::vector<float>(sizeof(float) * m_mode.frame_symbols * m_mode.symbol_bits);
-    auto input = reinterpret_cast<char *>(extracted.data());
-
-    m_data.read(input, sizeof(float) * m_mode.symbol_bits);
-
-    for(std::size_t symbol{1}; symbol < m_mode.frame_symbols; ++symbol)
-      {
-      if(!m_data.read(input + symbol * sizeof(float) * m_mode.symbol_bits, sizeof(float) * m_mode.symbol_bits))
-        {
-        m_frame.reset();
-        return false;
-        }
-      }
-
-    std::cout << "read frame\n";
 
     m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
     return (bool)m_frame;

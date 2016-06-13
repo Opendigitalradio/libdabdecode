@@ -19,6 +19,6 @@ set(LIB_SOURCES viterbi/calc_metric.cpp
 add_library(${PROJECT_NAME}_static STATIC ${LIB_SOURCES} ${DABCOMMON_SOURCES})
 add_library(${PROJECT_NAME}        SHARED ${LIB_SOURCES} ${DABCOMMON_SOURCES})
 
-add_executable(demo demo.cpp)
-target_link_libraries(demo dabdecode_static)
+#add_executable(demo demo.cpp)
+#target_link_libraries(demo dabdecode_static)
 
