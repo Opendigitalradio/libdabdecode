@@ -159,6 +159,7 @@ namespace dab
 
   bool ensemble::next_frame()
     {
+    /*
     if(!m_sync || !m_data)
       {
       return false;
@@ -189,6 +190,26 @@ namespace dab
         return false;
         }
       }
+
+    m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
+    return (bool)m_frame;
+    */
+
+    auto extracted = std::vector<float>(sizeof(float) * m_mode.frame_symbols * m_mode.symbol_bits);
+    auto input = reinterpret_cast<char *>(extracted.data());
+
+    m_data.read(input, sizeof(float) * m_mode.symbol_bits);
+
+    for(std::size_t symbol{1}; symbol < m_mode.frame_symbols; ++symbol)
+      {
+      if(!m_data.read(input + symbol * sizeof(float) * m_mode.symbol_bits, sizeof(float) * m_mode.symbol_bits))
+        {
+        m_frame.reset();
+        return false;
+        }
+      }
+
+    std::cout << "read frame\n";
 
     m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
     return (bool)m_frame;

@@ -6,7 +6,7 @@
 int main()
   {
   auto syncStream = std::ifstream{"data/syn", std::ios::binary};
-  auto dataStream = std::ifstream{"data/dat", std::ios::binary};
+  auto dataStream = std::ifstream{"data/d", std::ios::binary};
 
   if(!syncStream)
     {
