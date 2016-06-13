@@ -167,8 +167,8 @@ namespace dab
         {
         }
 
-      std::memcpy(extracted.data() + symbolIndex * sizeof(float) * m_mode.symbol_bits,
-                  symbol.data(), symbol.size() * sizeof(float));
+      std::memcpy(reinterpret_cast<char * >(extracted.data()) + symbolIndex * sizeof(float) * m_mode.symbol_bits,
+                  symbol.data(), m_mode.symbol_bits * sizeof(float));
       }
 
     m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
