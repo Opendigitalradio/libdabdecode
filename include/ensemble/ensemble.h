@@ -12,6 +12,7 @@
 #include <types/common_types.h>
 
 #include <cstdint>
+#include <functional>
 #include <iosfwd>
 #include <string>
 #include <memory>
@@ -108,7 +109,7 @@ namespace dab
      *
      * @see #services
      */
-    void activate(std::shared_ptr<service> const & service);
+    void activate(std::shared_ptr<service> const & service, std::function<void (std::vector<std::uint8_t>)> handler);
 
     /**
      * @brief Check if the ensemble is valid
@@ -118,13 +119,6 @@ namespace dab
      * may be accessed safely.
      */
     explicit operator bool() const;
-
-    /**
-     * @brief Retrieve the currently active service's data
-     *
-     * This function returns the data that is transported in the currently active service.
-     */
-    std::pair<transport_mechanism, std::vector<std::uint8_t>> active_data();
 
     private:
       /**

@@ -1,5 +1,6 @@
 #include "ensemble/service.h"
 #include "ensemble/service_component.h"
+#include "ensemble/subchannel.h"
 
 namespace dab
   {
@@ -57,6 +58,14 @@ namespace dab
   void service::primary(std::shared_ptr<service_component> component)
     {
     m_primaryComponent = component;
+    }
+
+  void service::set_handler(std::function<void (std::vector<std::uint8_t>)> handler)
+    {
+    if(m_primaryComponent)
+      {
+      m_primaryComponent->subchannel()->set_handler(handler);
+      }
     }
 
   }

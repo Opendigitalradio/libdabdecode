@@ -87,11 +87,9 @@ namespace dab
       /**
        * @internal
        *
-       * @brief Access the subchannel data
-       *
-       * This functions returns a reference to the data that is transported in the subchannel.
+       * @brief Set the data handler
        */
-      std::vector<std::uint8_t> const & data() const;
+      void set_handler(std::function<void (std::vector<std::uint8_t>)> handler);
 
       private:
         static std::shared_ptr<subchannel> make(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
@@ -142,11 +140,15 @@ namespace dab
         std::uint8_t const m_eepProtectionLevel;
         std::uint8_t const m_eepProtectionTable;
 
-        std::vector<float> m_deinterleavedData;
+        std::vector<std::vector<float>> m_deinterleavingBuffer;
+        std::vector<float> m_deinterleavedData{};
+
         fsm const m_fsm;
 
         std::vector<std::uint8_t> m_data{};
         std::uint8_t m_processedFragments{};
+
+        std::function<void (std::vector<std::uint8_t>)> m_handler;
 
         friend ensemble;
         friend fic_parser;

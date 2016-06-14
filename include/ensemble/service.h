@@ -2,9 +2,11 @@
 #define __DAB_ENSEMBLE__SERVICE
 
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace dab
   {
@@ -84,6 +86,8 @@ namespace dab
       void type(service_type const type);
 
       void primary(std::shared_ptr<service_component> component);
+
+      void set_handler(std::function<void (std::vector<std::uint8_t>)> handler);
 
       std::uint32_t const m_id;
       bool const m_isLocal;

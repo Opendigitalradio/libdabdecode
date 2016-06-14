@@ -7,7 +7,7 @@
 #include <memory>
 #include "constants/puncturing_vectors.h"
 
-#include <iostream>
+#include <cstring>
 
 namespace dab
   {
@@ -236,11 +236,6 @@ namespace dab
       return m_eepProtectionTable;
       }
 
-    std::vector<std::uint8_t> const & subchannel::data() const
-      {
-      return m_data;
-      }
-
     std::shared_ptr<subchannel> subchannel::make(std::uint16_t const id, std::uint16_t const start, std::uint16_t const size,
                                                  std::uint16_t const bitrate, bool const isEep,
                                                  std::uint16_t const eepProtectionLevel)
@@ -257,25 +252,32 @@ namespace dab
         m_isEep{isEep},
         m_eepProtectionLevel(eepProtectionLevel & 0x00FF),
         m_eepProtectionTable(eepProtectionLevel & 0xFF00 >> 8),
-        m_deinterleavedData(size * constants::kCuBits),
+        m_deinterleavingBuffer(size * constants::kCuBits, std::vector<float>(16)),
         m_fsm{1, 4, constants::kEncoderPolynomials}
       {
 
       }
 
-
+    /*
+     * This implementation is borrowed from Jan van Katwijk's sdr-j-dabreceiver which is released under GPL.
+     */
     void subchannel::process(std::vector<float>::const_iterator samplesStart, std::vector<float>::const_iterator samplesEnd)
       {
       auto const fragmentSize = std::distance(samplesStart, samplesEnd);
-      auto const fragmentBit = constants::kInterleavingDelays[m_processedFragments % 16];
+      m_deinterleavedData = std::vector<float>{samplesStart, samplesEnd};
 
-      for(int block = 0; block < fragmentSize / 16; ++block)
+      for(auto bit = 0; bit < fragmentSize; ++bit)
         {
-        m_deinterleavedData[block * 16 + fragmentBit] = *(samplesStart + block * 16 + fragmentBit);
+        m_deinterleavingBuffer[bit][constants::kInterleavingDelays[bit % 16]] = m_deinterleavedData[bit];
+        m_deinterleavedData[bit] = m_deinterleavingBuffer[bit][0];
+
+        std::memmove(&m_deinterleavingBuffer[bit][0], &m_deinterleavingBuffer[bit][1],
+                     constants::kInterleavingDelays[bit % 16] * sizeof(float));
         }
 
-      if(++m_processedFragments % 16)
+      if(m_processedFragments < 16)
         {
+        m_processedFragments++;
         return;
         }
 
@@ -284,6 +286,11 @@ namespace dab
         process_eep();
         }
 
+      }
+
+    void subchannel::set_handler(std::function<void (std::vector<std::uint8_t>)> handler)
+      {
+      m_handler = handler;
       }
 
     void subchannel::process_eep()
@@ -382,6 +389,11 @@ namespace dab
           }
 
         m_data[byteIndex] = byte;
+        }
+
+      if(m_handler)
+        {
+        m_handler(m_data);
         }
       }
 

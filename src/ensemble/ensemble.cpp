@@ -82,11 +82,12 @@ namespace dab
       }
     }
 
-  void ensemble::activate(std::shared_ptr<service> const & service)
+  void ensemble::activate(std::shared_ptr<service> const & service, std::function<void (std::vector<std::uint8_t>)> handler)
     {
     if(service && m_services.find(service->id()) != m_services.cend())
       {
       m_activeService = service;
+      service->set_handler(handler);
       }
     }
 
@@ -128,32 +129,6 @@ namespace dab
   ensemble::operator bool() const
     {
     return m_label.size() && m_id;
-    }
-
-  std::pair<transport_mechanism, std::vector<std::uint8_t>> ensemble::active_data()
-    {
-    std::vector<std::uint8_t> data{};
-
-    if(!m_activeService)
-      {
-      return std::make_pair(transport_mechanism::unknown, data);
-      }
-
-    auto const & service_component = m_activeService->primary();
-
-    if(!service_component)
-      {
-      return std::make_pair(transport_mechanism::unknown, data);
-      }
-
-    auto const & subchannel = service_component->subchannel();
-
-    if(!subchannel)
-      {
-      return std::make_pair(transport_mechanism::unknown, data);
-      }
-
-    return std::make_pair(service_component->transport(), subchannel->data());
     }
 
   bool ensemble::next_frame()
