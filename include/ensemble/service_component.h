@@ -65,11 +65,6 @@ namespace dab
      */
     std::uint8_t type() const;
 
-    /**
-     * @brief Get the ID of the associated subchannel
-     */
-    std::shared_ptr<__internal_dabdecode::subchannel> subchannel() const;
-
     private:
       /**
        * @internal
@@ -100,7 +95,14 @@ namespace dab
       /**
        * @internal
        *
-       * @brief Set the associated subchannel id
+       * @brief Get associated subchannel
+       */
+      std::shared_ptr<__internal_dabdecode::subchannel> subchannel() const;
+
+      /**
+       * @internal
+       *
+       * @brief Associate a subchannel with the service component
        */
       void subchannel(std::shared_ptr<__internal_dabdecode::subchannel> subchannel);
 
@@ -120,6 +122,8 @@ namespace dab
       std::uint8_t m_subchannelId{std::numeric_limits<std::uint8_t>::max()};
       std::uint8_t m_type{};
 
+      friend struct service;
+      friend struct ensemble;
       friend __internal_dabdecode::fic_parser;
     };
 
