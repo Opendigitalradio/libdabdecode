@@ -1,5 +1,5 @@
-#ifndef __DAB_CONSTANTS__CHANNEL_SIZE_TABLES
-#define __DAB_CONSTANTS__CHANNEL_SIZE_TABLES
+#ifndef DABDECODE_CONSTANTS_CHANNEL_SIZE_TABLES
+#define DABDECODE_CONSTANTS_CHANNEL_SIZE_TABLES
 
 #include <array>
 #include <cstdint>
@@ -7,7 +7,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace constants
@@ -113,4 +113,3 @@ namespace dab
   }
 
 #endif
-

@@ -1,5 +1,5 @@
-#ifndef __DAB_ENSEMBLE__SERVICE_COMPONENT
-#define __DAB_ENSEMBLE__SERVICE_COMPONENT
+#ifndef DABDECODE_ENSEMBLE_SERVICE_COMPONENT
+#define DABDECODE_ENSEMBLE_SERVICE_COMPONENT
 
 #include <cstdint>
 #include <limits>
@@ -8,7 +8,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
     struct fic_parser;
     struct subchannel;
@@ -97,14 +97,14 @@ namespace dab
        *
        * @brief Get associated subchannel
        */
-      std::shared_ptr<__internal_dabdecode::subchannel> subchannel() const;
+      std::shared_ptr<internal::subchannel> subchannel() const;
 
       /**
        * @internal
        *
        * @brief Associate a subchannel with the service component
        */
-      void subchannel(std::shared_ptr<__internal_dabdecode::subchannel> subchannel);
+      void subchannel(std::shared_ptr<internal::subchannel> subchannel);
 
       /**
        * @internal
@@ -118,16 +118,15 @@ namespace dab
       bool const m_isPrimary;
       bool const m_caApplies;
 
-      std::shared_ptr<__internal_dabdecode::subchannel> m_subchannel{};
+      std::shared_ptr<internal::subchannel> m_subchannel{};
       std::uint8_t m_subchannelId{std::numeric_limits<std::uint8_t>::max()};
       std::uint8_t m_type{};
 
       friend struct service;
       friend struct ensemble;
-      friend __internal_dabdecode::fic_parser;
+      friend internal::fic_parser;
     };
 
   }
 
 #endif
-

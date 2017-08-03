@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "viterbi/fsm.h"
+#include "dab/viterbi/fsm.h"
 
 #include <cstdio>
 #include <string>
@@ -31,7 +31,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     bool dec2base(unsigned int num, int base, std::vector<int> &s)
@@ -307,4 +307,3 @@ namespace dab
     }
 
   }
-

@@ -1,12 +1,12 @@
-#ifndef __DAB_CONSTANTS__INTERLEAVING_DELAYS
-#define __DAB_CONSTANTS__INTERLEAVING_DELAYS
+#ifndef DABDECODE_CONSTANTS_INTERLEAVING_DELAYS
+#define DABDECODE_CONSTANTS_INTERLEAVING_DELAYS
 
 #include <array>
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace constants

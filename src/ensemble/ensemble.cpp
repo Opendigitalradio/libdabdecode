@@ -1,21 +1,23 @@
-#include "ensemble/ensemble.h"
-#include "ensemble/service.h"
-#include "ensemble/service_component.h"
+#include "dab/ensemble/ensemble.h"
+#include "dab/ensemble/service.h"
+#include "dab/ensemble/service_component.h"
 
-#include "frame/cif.h"
-#include "frame/fib.h"
+#include "dab/frame/cif.h"
+#include "dab/frame/fib.h"
 
-#include <constants/transmission_modes.h>
+#include <dab/constants/transmission_modes.h>
 
 #include <algorithm>
+#include <chrono>
 #include <cstring>
+#include <thread>
 #include <vector>
 
 namespace dab
   {
 
-  using namespace __internal_dabdecode;
-  using namespace __internal_common::types;
+  using namespace internal;
+  using namespace internal::types;
 
   ensemble::ensemble(symbol_queue_t & symbols, transmission_mode const & mode)
     : m_symbolQueue{symbols},
@@ -138,8 +140,9 @@ namespace dab
 
     for(auto symbolIndex = 0u; symbolIndex < m_mode.frame_symbols; ++symbolIndex)
       {
-      while(!m_symbolQueue.wait_dequeue_timed(symbol, 100))
+      while(!m_symbolQueue.try_dequeue(symbol))
         {
+        std::this_thread::sleep_for(std::chrono::microseconds{100});
         }
 
       std::memcpy(reinterpret_cast<char * >(extracted.data()) + symbolIndex * sizeof(float) * m_mode.symbol_bits,

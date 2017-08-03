@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "viterbi/calc_metric.h"
-#include "viterbi/core_algorithms.h"
+#include "dab/viterbi/calc_metric.h"
+#include "dab/viterbi/core_algorithms.h"
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     void viterbi_algorithm_combined(int I, int S, int O,
@@ -123,4 +123,3 @@ namespace dab
     }
 
   }
-

@@ -1,9 +1,9 @@
-#include "frame/cif.h"
+#include "dab/frame/cif.h"
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     cif::cif(cif::iterator const & begin, cif::iterator const & end)

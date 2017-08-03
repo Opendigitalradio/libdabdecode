@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DAB_VITERBI__FSM
-#define __DAB_VITERBI__FSM
+#ifndef DAB_VITERBI_FSM
+#define DAB_VITERBI_FSM
 
 #include <array>
 #include <vector>
@@ -30,7 +30,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     class fsm

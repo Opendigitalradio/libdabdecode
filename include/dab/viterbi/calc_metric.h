@@ -20,30 +20,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __DAB_VITERBI__CORE_ALGORITHMS
-#define __DAB_VITERBI__CORE_ALGORITHMS
+#ifndef DABDECODE_VITERBI_CALC_METRIC
+#define DABDECODE_VITERBI_CALC_METRIC
 
-#include <cstdint>
-#include <vector>
+#include <array>
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
-    void viterbi_algorithm_combined(int I,
-                                    int S,
-                                    int O,
-                                    const std::vector<int> &OS,
-                                    const std::vector< std::vector<int> > &PS,
-                                    const std::vector< std::vector<int> > &PI,
-                                    int K,
-                                    int S0,
-                                    int SK,
-                                    int D,
-                                    const float *in,
-                                    uint8_t *out);
+    void calc_metric(int O, int D, const float *input, float *metric);
+
     }
 
   }

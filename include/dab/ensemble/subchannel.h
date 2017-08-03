@@ -1,8 +1,8 @@
-#ifndef __DAB_ENSEMBLE__SUBCHANNEL
-#define __DAB_ENSEMBLE__SUBCHANNEL
+#ifndef DABDECODE_ENSEMBLE_SUBCHANNEL
+#define DABDECODE_ENSEMBLE_SUBCHANNEL
 
-#include "constants/convolution_encoder_attributes.h"
-#include "viterbi/fsm.h"
+#include "dab/constants/convolution_encoder_attributes.h"
+#include "dab/viterbi/fsm.h"
 
 #include <cstdint>
 #include <memory>
@@ -14,7 +14,7 @@ namespace dab
 
   struct ensemble;
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     struct fic_parser;
@@ -160,4 +160,3 @@ namespace dab
   }
 
 #endif
-

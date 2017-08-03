@@ -1,15 +1,15 @@
-#ifndef __DAB_ENSEMBLE__ENSEMBLE
-#define __DAB_ENSEMBLE__ENSEMBLE
+#ifndef DABDECODE_ENSEMBLE_ENSEMBLE
+#define DABDECODE_ENSEMBLE_ENSEMBLE
 
-#include "ensemble/subchannel.h"
-#include "ensemble/service.h"
+#include "dab/ensemble/subchannel.h"
+#include "dab/ensemble/service.h"
 
-#include "frame/frame.h"
+#include "dab/frame/frame.h"
 
-#include "parser/fic_parser.h"
+#include "dab/parser/fic_parser.h"
 
-#include <constants/transmission_modes.h>
-#include <types/common_types.h>
+#include <dab/constants/transmission_modes.h>
+#include <dab/types/common_types.h>
 
 #include <cstdint>
 #include <functional>
@@ -46,7 +46,7 @@ namespace dab
      * @param symbols The OFDM symbol queue
      * @param mode The transmission mode used for the ensemble
      */
-    ensemble(symbol_queue_t & symbols, __internal_common::types::transmission_mode const & mode);
+    ensemble(symbol_queue_t & symbols, internal::types::transmission_mode const & mode);
 
     /**
      * @brief Retrieve the label of the ensemble
@@ -152,7 +152,7 @@ namespace dab
        *
        * @brief Add a subchannel to the ensemble
        */
-      void add(std::shared_ptr<__internal_dabdecode::subchannel> subchannel);
+      void add(std::shared_ptr<internal::subchannel> subchannel);
 
       /**
        * @internal
@@ -169,13 +169,13 @@ namespace dab
       void add(std::shared_ptr<service_component> component);
 
       symbol_queue_t & m_symbolQueue;
-      __internal_common::types::transmission_mode const & m_mode;
+      internal::types::transmission_mode const & m_mode;
 
-      __internal_dabdecode::fic_parser m_ficParser{*this};
-      std::unique_ptr<__internal_dabdecode::frame> m_frame{};
+      internal::fic_parser m_ficParser{*this};
+      std::unique_ptr<internal::frame> m_frame{};
 
       std::map<std::uint32_t, std::shared_ptr<service>> m_services{};
-      std::map<std::uint16_t, std::shared_ptr<__internal_dabdecode::subchannel>> m_subchannels{};
+      std::map<std::uint16_t, std::shared_ptr<internal::subchannel>> m_subchannels{};
       std::map<std::uint16_t, std::shared_ptr<service_component>> m_components{};
 
       std::shared_ptr<service> m_activeService{};
@@ -183,10 +183,9 @@ namespace dab
       std::string m_label{};
       std::uint16_t m_id{};
 
-      friend __internal_dabdecode::fic_parser;
+      friend internal::fic_parser;
     };
 
   }
 
 #endif
-

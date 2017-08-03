@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "constants/convolution_encoder_attributes.h"
-#include "viterbi/calc_metric.h"
+#include "dab/constants/convolution_encoder_attributes.h"
+#include "dab/viterbi/calc_metric.h"
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     void calc_metric(int O, int D, const float *input, float *metric)

@@ -1,7 +1,7 @@
-#ifndef __DAB_PARSER__FIC_PARSER
-#define __DAB_PARSER__FIC_PARSER
+#ifndef DABDECODE_PARSER_FIC_PARSER
+#define DABDECODE_PARSER_FIC_PARSER
 
-#include "frame/fib.h"
+#include "dab/frame/fib.h"
 
 #include <vector>
 
@@ -10,7 +10,7 @@ namespace dab
 
   struct ensemble;
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     struct fic_parser
@@ -40,4 +40,3 @@ namespace dab
   }
 
 #endif
-

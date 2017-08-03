@@ -1,5 +1,5 @@
-#include "ensemble/service_component.h"
-#include "ensemble/subchannel.h"
+#include "dab/ensemble/service_component.h"
+#include "dab/ensemble/subchannel.h"
 
 namespace dab
   {
@@ -23,7 +23,7 @@ namespace dab
     return m_caApplies;
     }
 
-  std::shared_ptr<__internal_dabdecode::subchannel> service_component::subchannel() const
+  std::shared_ptr<internal::subchannel> service_component::subchannel() const
     {
     return m_subchannel;
     }
@@ -53,7 +53,7 @@ namespace dab
       }
     }
 
-  void service_component::subchannel(std::shared_ptr<__internal_dabdecode::subchannel> subchannel)
+  void service_component::subchannel(std::shared_ptr<internal::subchannel> subchannel)
     {
     if(subchannel)
       {

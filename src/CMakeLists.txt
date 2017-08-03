@@ -1,20 +1,27 @@
-set(LIB_SOURCES viterbi/calc_metric.cpp
-                viterbi/core_algorithms.cpp
-                viterbi/fsm.cpp
+set(LIBRARY_NAME ${${PROJECT_NAME}_LOWER})
 
-                frame/frame.cpp
-                frame/cif.cpp
-                frame/fib.cpp
+add_library(${LIBRARY_NAME}
+  ensemble/ensemble.cpp
+  ensemble/service.cpp
+  ensemble/service_component.cpp
+  ensemble/subchannel.cpp
+  frame/cif.cpp
+  frame/fib.cpp
+  frame/frame.cpp
+  parser/fic_parser.cpp
+  parser/fic_parser_fig_0.cpp
+  parser/fic_parser_fig_1.cpp
+  viterbi/calc_metric.cpp
+  viterbi/core_algorithms.cpp
+  viterbi/fsm.cpp
+  )
 
-                ensemble/ensemble.cpp
-                ensemble/service.cpp
-                ensemble/service_component.cpp
-                ensemble/subchannel.cpp
+target_link_libraries(${LIBRARY_NAME}
+  ${LIBRARY_NAME}_iface
+  )
 
-                parser/fic_parser.cpp
-                parser/fic_parser_fig_0.cpp
-                parser/fic_parser_fig_1.cpp)
-
-
-add_library(${PROJECT_NAME}_static STATIC ${LIB_SOURCES} ${DABCOMMON_SOURCES})
-add_library(${PROJECT_NAME}        SHARED ${LIB_SOURCES} ${DABCOMMON_SOURCES})
+install(TARGETS ${LIBRARY_NAME}
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  )

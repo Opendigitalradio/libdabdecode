@@ -1,8 +1,8 @@
-#include "constants/channel_size_tables.h"
-#include "ensemble/ensemble.h"
-#include "parser/fic_parser.h"
-#include "ensemble/service.h"
-#include "ensemble/service_component.h"
+#include "dab/constants/channel_size_tables.h"
+#include "dab/ensemble/ensemble.h"
+#include "dab/ensemble/service.h"
+#include "dab/ensemble/service_component.h"
+#include "dab/parser/fic_parser.h"
 
 #include <cstdint>
 #include <iostream>
@@ -10,7 +10,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     void fic_parser::fig_0(fic_parser::iterator const & base, fic_parser::iterator const & end)
@@ -168,4 +168,3 @@ namespace dab
     }
 
   }
-

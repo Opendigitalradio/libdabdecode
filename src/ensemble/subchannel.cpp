@@ -1,18 +1,19 @@
-#include "ensemble/subchannel.h"
-#include "frame/cif.h"
-#include "constants/interleaving_delays.h"
-#include "viterbi/fsm.h"
-#include "viterbi/core_algorithms.h"
-#include "constants/convolution_encoder_attributes.h"
+#include "dab/constants/convolution_encoder_attributes.h"
+#include "dab/constants/interleaving_delays.h"
+#include "dab/constants/puncturing_vectors.h"
+#include "dab/ensemble/subchannel.h"
+#include "dab/frame/cif.h"
+#include "dab/viterbi/core_algorithms.h"
+#include "dab/viterbi/fsm.h"
+
 #include <memory>
-#include "constants/puncturing_vectors.h"
 
 #include <cstring>
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace
@@ -400,4 +401,3 @@ namespace dab
     }
 
   }
-

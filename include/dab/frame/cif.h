@@ -1,5 +1,5 @@
-#ifndef __DAB_FRAME__CIF
-#define __DAB_FRAME__CIF
+#ifndef DABDECODE_FRAME_CIF
+#define DABDECODE_FRAME_CIF
 
 #include <cstdint>
 #include <vector>
@@ -7,7 +7,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace constants
@@ -74,4 +74,3 @@ namespace dab
   }
 
 #endif
-

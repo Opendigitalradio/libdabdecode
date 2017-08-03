@@ -1,10 +1,10 @@
-#include "ensemble/ensemble.h"
-#include "parser/fic_parser.h"
+#include "dab/ensemble/ensemble.h"
+#include "dab/parser/fic_parser.h"
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     fic_parser::fic_parser(ensemble & target)
@@ -46,4 +46,3 @@ namespace dab
     }
 
   }
-

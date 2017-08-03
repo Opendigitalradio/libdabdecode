@@ -1,5 +1,5 @@
-#ifndef __DAB_CONSTANTS__CONVOLUTION_ENCODER_ATTRIBUTES
-#define __DAB_CONSTANTS__CONVOLUTION_ENCODER_ATTRIBUTES
+#ifndef DABDECODE_CONSTANTS_CONVOLUTION_ENCODER_ATTRIBUTES
+#define DABDECODE_CONSTANTS_CONVOLUTION_ENCODER_ATTRIBUTES
 
 #include <array>
 #include <cstdint>
@@ -18,7 +18,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace constants

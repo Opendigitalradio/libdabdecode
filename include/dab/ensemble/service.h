@@ -1,5 +1,5 @@
-#ifndef __DAB_ENSEMBLE__SERVICE
-#define __DAB_ENSEMBLE__SERVICE
+#ifndef DABDECODE_ENSEMBLE_SERVICE
+#define DABDECODE_ENSEMBLE_SERVICE
 
 #include <cstdint>
 #include <functional>
@@ -28,7 +28,7 @@ namespace dab
     data
     };
 
-  namespace __internal_dabdecode
+  namespace internal
     {
     struct fic_parser;
     }
@@ -98,11 +98,10 @@ namespace dab
       std::shared_ptr<service_component> m_primaryComponent{};
       std::map<std::uint16_t, std::shared_ptr<service_component>> m_components{};
 
-      friend __internal_dabdecode::fic_parser;
+      friend internal::fic_parser;
       friend ensemble;
     };
 
   }
 
 #endif
-

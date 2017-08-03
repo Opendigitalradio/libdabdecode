@@ -1,16 +1,16 @@
-#include "ensemble/ensemble.h"
-#include "parser/fic_parser.h"
+#include "dab/ensemble/ensemble.h"
+#include "dab/parser/fic_parser.h"
 
-#include <literals/binary_literal.h>
+#include <dab/literals/binary_literal.h>
 
 #include <cstdint>
 
 namespace dab
   {
 
-  using namespace __internal_common::literals;
+  using namespace literals;
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     void fic_parser::fig_1(fic_parser::iterator const & base)
@@ -59,4 +59,3 @@ namespace dab
     }
 
   }
-

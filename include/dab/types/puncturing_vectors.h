@@ -1,5 +1,5 @@
-#ifndef __DAB_TYPES__PUNCTURING_VECTORS
-#define __DAB_TYPES__PUNCTURING_VECTORS
+#ifndef DABDECODE_TYPES_PUNCTURING_VECTORS
+#define DABDECODE_TYPES_PUNCTURING_VECTORS
 
 #include <cstdint>
 #include <array>
@@ -7,7 +7,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace types

@@ -1,7 +1,7 @@
-#ifndef __DAB_CONSTANTS__PUNCTURING_VECTORS
-#define __DAB_CONSTANTS__PUNCTURING_VECTORS
+#ifndef DABDECODE_CONSTANTS_PUNCTURING_VECTORS
+#define DABDECODE_CONSTANTS_PUNCTURING_VECTORS
 
-#include "types/puncturing_vectors.h"
+#include "dab/types/puncturing_vectors.h"
 
 /**
  * @file
@@ -20,7 +20,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace constants

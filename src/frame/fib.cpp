@@ -1,11 +1,11 @@
-#include "frame/fib.h"
+#include "dab/frame/fib.h"
 
 #include <boost/crc.hpp>
 
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     fib::fib(fib::iterator const & begin, fib::iterator const & end)

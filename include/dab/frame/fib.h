@@ -1,5 +1,5 @@
-#ifndef __DAB_FRAME__FIB
-#define __DAB_FRAME__FIB
+#ifndef DABDECODE_FRAME_FIB
+#define DABDECODE_FRAME_FIB
 
 #include <cstdint>
 #include <iosfwd>
@@ -9,7 +9,7 @@
 namespace dab
   {
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     /**

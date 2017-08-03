@@ -1,10 +1,10 @@
-#include "constants/puncturing_vectors.h"
-#include "frame/cif.h"
-#include "frame/fib.h"
-#include "frame/frame.h"
-#include "viterbi/core_algorithms.h"
+#include "dab/constants/puncturing_vectors.h"
+#include "dab/frame/cif.h"
+#include "dab/frame/fib.h"
+#include "dab/frame/frame.h"
+#include "dab/viterbi/core_algorithms.h"
 
-#include <constants/transmission_modes.h>
+#include <dab/constants/transmission_modes.h>
 
 #include <memory>
 #include <stdexcept>
@@ -13,10 +13,10 @@
 namespace dab
   {
 
-  using namespace __internal_common::types;
-  using namespace __internal_dabdecode::constants;
+  using namespace internal::types;
+  using namespace internal::constants;
 
-  namespace __internal_dabdecode
+  namespace internal
     {
 
     namespace
@@ -28,7 +28,7 @@ namespace dab
         auto inputIndex = std::size_t{};
         auto outputIndex = std::size_t{};
 
-        auto const nofFirstBlocks = mode.id == transmission_modes::kTransmissionMode3.id ? 29 : 21;
+        auto const nofFirstBlocks = mode.id == kTransmissionMode3.id ? 29 : 21;
         auto const nofSecondBlocks = 3;
         auto const nofTailBits = 24;
 
