@@ -20,7 +20,7 @@ class LibDABDecodeConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        lib = '-DBUILD_SHARED_LIBS=%s' % 'On' if self.options.shared else 'Off'
+        lib = '-DBUILD_SHARED_LIBS=%s' % ('On' if self.options.shared else 'Off')
         args = [lib, '-DCMAKE_INSTALL_PREFIX="%s"' % self.package_folder]
         self.run('cmake %s %s %s'
                  % (self.source_folder,
