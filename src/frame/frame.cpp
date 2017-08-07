@@ -106,9 +106,8 @@ namespace dab
       : m_data{std::move(data)},
         m_mode{mode},
         m_fsm{kEncoderInputLength,kEncoderOutputLength, kEncoderPolynomials}
-
       {
-      if(m_data.size() != m_mode.symbol_bits * m_mode.frame_symbols * sizeof(float))
+      if(m_data.size() != m_mode.symbol_bits * m_mode.frame_symbols)
         {
         throw std::runtime_error{std::string{"Invalid data length "} + std::to_string(m_data.size())};
         }
@@ -145,7 +144,7 @@ namespace dab
     std::vector<cif> frame::msc() const
       {
       auto msc = std::vector<cif>{};
-      auto pos = m_data.cbegin() + m_mode.fic_symbols * m_mode.symbol_bits;
+      auto pos = m_data.cbegin() + (m_mode.fic_symbols) * m_mode.symbol_bits;
 
       for(std::size_t index{}; index < m_mode.frame_cifs; ++index)
         {

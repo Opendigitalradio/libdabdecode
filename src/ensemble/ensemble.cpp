@@ -136,20 +136,23 @@ namespace dab
   bool ensemble::next_frame()
     {
     auto symbol = std::vector<float>{};
-    auto extracted = std::vector<float>(sizeof(float) * m_mode.frame_symbols * m_mode.symbol_bits);
+    auto extracted = std::vector<std::vector<float>>(m_mode.frame_symbols);
 
-    for(auto symbolIndex = 0u; symbolIndex < m_mode.frame_symbols; ++symbolIndex)
+    m_symbolQueue.dequeue(extracted);
+    while(!m_symbolQueue.try_dequeue(extracted))
       {
-      while(!m_symbolQueue.try_dequeue(symbol))
-        {
-        std::this_thread::sleep_for(std::chrono::microseconds{100});
-        }
-
-      std::memcpy(reinterpret_cast<char * >(extracted.data()) + symbolIndex * sizeof(float) * m_mode.symbol_bits,
-                  symbol.data(), m_mode.symbol_bits * sizeof(float));
+      std::this_thread::sleep_for(std::chrono::microseconds{100});
       }
 
-    m_frame = std::unique_ptr<frame>(new frame{std::move(extracted), m_mode});
+    std::vector<float> bits(extracted.size() * extracted.front().size());
+    std::size_t copied{};
+    for(auto const & symbol : extracted)
+      {
+      std::memcpy(bits.data() + copied * symbol.size(), symbol.data(), sizeof(float) * symbol.size());
+      ++copied;
+      }
+
+    m_frame = std::unique_ptr<frame>(new frame{std::move(bits), m_mode});
     return (bool)m_frame;
     }
 
