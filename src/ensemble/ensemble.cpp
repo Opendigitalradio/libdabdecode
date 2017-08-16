@@ -138,7 +138,6 @@ namespace dab
     auto symbol = std::vector<float>{};
     auto extracted = std::vector<std::vector<float>>(m_mode.frame_symbols);
 
-    m_symbolQueue.dequeue(extracted);
     while(!m_symbolQueue.try_dequeue(extracted))
       {
       std::this_thread::sleep_for(std::chrono::microseconds{100});
