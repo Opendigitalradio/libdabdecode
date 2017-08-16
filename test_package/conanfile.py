@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
 from os import (
     chdir,
-    getenv,
     sep
 )
 from conans import ConanFile, CMake
@@ -17,11 +16,6 @@ class DABDecodeTestConan(ConanFile):
         'compiler',
         'os',
     )
-    requires = 'libdabdecode/{version}@{user}/{channel}'.format(**{
-        'channel': getenv('CONAN_USERNAME', 'Opendigitalradio'),
-        'user': getenv('CONAN_CHANNEL', 'stable'),
-        'version': version,
-    })
     generators = 'cmake'
 
     def build(self):
