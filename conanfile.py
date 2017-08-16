@@ -4,35 +4,52 @@ from conans import ConanFile, CMake
 
 class LibDABDecodeConan(ConanFile):
     name = 'libdabdecode'
-    description = 'The demoding subsystem for the ODR DAB data toolkit'
-    license = 'BSD 3-clause'
     version = '1.0.1'
+    description = (
+        'The DAB frame decoding infrastructure of the ODR DAB data toolkit, '
+        'that provides types and functions to work with DAB transmission '
+        'frames'
+    )
+    settings = (
+        'arch',
+        'build_type',
+        'compiler',
+        'os',
+    )
+    options = {
+        'shared': [True, False],
+        'test': [True, False],
+    }
+    default_options = (
+        'shared=True',
+        'test=True',
+    )
     url = 'https://github.com/Opendigitalradio/libdabdecode.git'
-    settings = ['os', 'compiler', 'build_type', 'arch']
-    options = {'shared': [True, False]}
-    default_options = 'shared=True'
+    license = 'BSD 3-clause'
     exports_sources = (
-        'cmake/*',
         'CMakeLists.txt',
+        'LICENSE',
+        'README.md',
+        'cmake/*',
         'include/*',
-        'src/*'
+        'src/*',
     )
 
     def build(self):
-        cmake = CMake(self)
-        lib = '-DBUILD_SHARED_LIBS=%s' % ('On' if self.options.shared else 'Off')
-        args = [lib, '-DCMAKE_INSTALL_PREFIX="%s"' % self.package_folder]
-        self.run('cmake %s %s %s'
-                 % (self.source_folder,
-                    cmake.command_line,
-                    ' '.join(args)))
-        self.run('cmake --build . --target install %s' % cmake.build_config)
+        cmake = CMake(self, parallel=True)
+        cmake.configure(source_dir=self.conanfile_directory)
+        cmake.build()
+        cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ['dabdecode']
+        self.cpp_info.libs = [
+            'dabdecode'
+        ]
+        self.cpp_info.includedirs = [
+            'include'
+        ]
 
     def requirements(self):
-        self.requires('libdabcommon/[>=1.0]@fmorgner/stable')
-
-    # def source(self):
-        # self.run('git clone %s' % self.url)
+        self.requires('libdabcommon/[>=1.0]@Opendigitalradio/stable')
+        if self.options.test:
+            self.requires('CUTEX/[>=1.0]@fmorgner/stable')
