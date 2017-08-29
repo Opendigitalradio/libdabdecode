@@ -8,7 +8,7 @@ from conans import ConanFile, CMake
 
 class DABDecodeTestConan(ConanFile):
     name = 'libdabdecode package test'
-    version = '1.0.1'
+    version = '1.0.2'
     description = 'The Conan.io package test for libdabdecode'
     settings = (
         'arch',

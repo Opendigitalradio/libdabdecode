@@ -4,7 +4,7 @@ from conans import ConanFile, CMake
 
 class LibDABDecodeConan(ConanFile):
     name = 'libdabdecode'
-    version = '1.0.1'
+    version = '1.0.2'
     description = (
         'The DAB frame decoding infrastructure of the ODR DAB data toolkit, '
         'that provides types and functions to work with DAB transmission '

@@ -13,8 +13,8 @@ if(EXTERNAL_DEPS_VIA STREQUAL "conan")
 elseif(EXTERNAL_DEPS_VIA STREQUAL "git")
   external_dependency(CMAKE
     NAME    "dabcommon"
-    REPO    "https://github.com/fmorgner/libdabcommon"
+    REPO    "https://github.com/Opendigitalradio/libdabcommon"
     )
 else()
-  message(FATAL_ERROR "Unknown dependency resolution mechanism 'EXTERNAL_DEPS_VIA}'")
+  message(FATAL_ERROR "Unknown dependency resolution mechanism '${EXTERNAL_DEPS_VIA}'")
 endif()
