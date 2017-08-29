@@ -51,5 +51,3 @@ class LibDABDecodeConan(ConanFile):
 
     def requirements(self):
         self.requires('libdabcommon/[>=1.0]@Opendigitalradio/stable')
-        if self.options.test:
-            self.requires('CUTEX/[>=1.0]@fmorgner/stable')

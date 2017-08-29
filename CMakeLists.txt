@@ -3,18 +3,11 @@ project("DABDecode"
   LANGUAGES CXX
   VERSION 1.0.1)
 
-string(TOUPPER ${PROJECT_NAME} ${PROJECT_NAME}_UPPER)
-string(TOLOWER ${PROJECT_NAME} ${PROJECT_NAME}_LOWER)
-
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
-set(CXX_VERSION "c++11")
 
-include("CompilerSetup")
-include("ConanPackages")
-
-install_conan_packages(SYSTEM_HEADERS
-  PKGOPTS ${CONAN_OPTIONS}
-  )
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config/Base.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config/Options.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config/Dependencies.cmake")
 
 find_package(Boost REQUIRED)
 
@@ -23,9 +16,3 @@ include_directories("include")
 
 add_subdirectory("include")
 add_subdirectory("src")
-
-install(EXPORT ${PROJECT_NAME}
-  DESTINATION share/${${PROJECT_NAME}_LOWER}/cmake
-  )
-
-export(EXPORT ${PROJECT_NAME})
