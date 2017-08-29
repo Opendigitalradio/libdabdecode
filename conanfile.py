@@ -37,7 +37,8 @@ class LibDABDecodeConan(ConanFile):
 
     def build(self):
         cmake = CMake(self, parallel=True)
-        cmake.configure(source_dir=self.conanfile_directory)
+        cmake.definitions['EXTERNAL_DEPS_VIA'] = 'conan'
+        cmake.configure()
         cmake.build()
         cmake.install()
 
