@@ -12,7 +12,7 @@ set_property(CACHE EXTERNAL_DEPS_VIA
   "conan"
   )
 
-macro(EXTERNAL_DEPENDENCY)
+function(EXTERNAL_DEPENDENCY)
   set(OPTS   CMAKE)
   set(SVARGS NAME LIBNAME REPO)
   set(MVARGS INCLUDE_DIRECTORIES DEPENDENCIES)
@@ -36,6 +36,24 @@ macro(EXTERNAL_DEPENDENCY)
     find_package(Git REQUIRED)
   endif()
 
+  if(NOT DEP_LIBNAME)
+    set(DEP_LIBNAME ${DEP_NAME})
+  endif()
+
+  list(APPEND ${${PROJECT_NAME}_UPPER}_DEPS
+    ${DEP_LIBNAME}
+    )
+
+  set(${${PROJECT_NAME}_UPPER}_DEPS ${${${PROJECT_NAME}_UPPER}_DEPS} PARENT_SCOPE)
+
+  set(GUARD_TARGET "external_dep_${DEP_LIBNAME}")
+
+  if(NOT TARGET ${GUARD_TARGET})
+    add_custom_target(${GUARD_TARGET})
+  else()
+    return()
+  endif()
+
   set(CLONE_DIR "${PROJECT_SOURCE_DIR}/external")
 
   file(MAKE_DIRECTORY ${CLONE_DIR})
@@ -48,10 +66,6 @@ macro(EXTERNAL_DEPENDENCY)
       OUTPUT_FILE "${CMAKE_BINARY_DIR}/${DEP_NAME}_git_stdout.log"
       ERROR_FILE "${CMAKE_BINARY_DIR}/${DEP_NAME}_git_stderr.log"
       )
-  endif()
-
-  if(NOT DEP_LIBNAME)
-    set(DEP_LIBNAME ${DEP_NAME})
   endif()
 
   if(DEP_CMAKE)
@@ -77,9 +91,5 @@ macro(EXTERNAL_DEPENDENCY)
       )
   endif()
 
-  list(APPEND ${${PROJECT_NAME}_UPPER}_DEPS
-    ${DEP_LIBNAME}
-    )
-
   unset(CLONE_DIR)
-endmacro()
+endfunction()
