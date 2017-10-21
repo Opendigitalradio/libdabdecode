@@ -126,6 +126,7 @@ namespace dab
 
   bool ensemble::update()
     {
+    m_aborted = false;
     if(next_frame())
       {
       auto const & fic = m_frame->fic();
@@ -153,10 +154,18 @@ namespace dab
       }
     else
       {
-      m_id = 0;
-      m_label = "";
+      if(!m_aborted)
+        {
+        m_id = 0;
+        m_label = "";
+        }
       return false;
       }
+    }
+
+  void ensemble::abort()
+    {
+    m_aborted = true;
     }
 
   ensemble::operator bool() const
@@ -172,6 +181,10 @@ namespace dab
     while(!m_symbolQueue.try_dequeue(extracted))
       {
       std::this_thread::sleep_for(std::chrono::microseconds{100});
+      if(m_aborted)
+        {
+        return false;
+        }
       }
 
     std::vector<float> bits(extracted.size() * extracted.front().size());

@@ -42,7 +42,9 @@
 #include <dab/constants/transmission_modes.h>
 #include <dab/types/common_types.h>
 
+#include <atomic>
 #include <cstdint>
+#include <chrono>
 #include <functional>
 #include <iosfwd>
 #include <string>
@@ -133,6 +135,11 @@ namespace dab
     bool update();
 
     /**
+     * @brief Abort the current update
+     */
+    void abort();
+
+    /**
      * @brief Activate a service for decoding
      *
      * This function activates a service for decoding. The reference to the
@@ -213,6 +220,8 @@ namespace dab
 
       std::string m_label{};
       std::uint16_t m_id{};
+
+      std::atomic_bool m_aborted{};
 
       friend internal::fic_parser;
     };
